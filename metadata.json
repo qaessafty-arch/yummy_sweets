@@ -1,0 +1,6 @@
+{
+  "name": "yummy-sweets",
+  "description": "Artisanal boutique bakery storefront featuring English and Kurdish Sorani, dual USD/IQD pricing, WhatsApp checkout with customer order history, live search, sort, filters, and management panel.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
