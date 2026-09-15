@@ -3634,20 +3634,6 @@ html[dir="rtl"] .customer-drawer.is-open {
   }
 }
 
-/* Reduced Motion Override */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-header#mainHeader:nth-of-type(1) > div:nth-of-type(1) {
-  max-width: 100%;
-  width: 100%;
-  box-sizing: border-box;
-}
 
 /* =========================================================
    ARTISANAL BAKERY — ELEGANT DESIGN SYSTEM
@@ -4991,7 +4977,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700 !important;
   letter-spacing: var(--ls-ultra) !important;
   text-transform: uppercase !important;
-  color: rgba(250, 240, 230, 0.9) !important;
+  color: rgba(250, 240, 230, 0.45) !important;
 }
 
 /* Social icons — gold hover */
@@ -5268,399 +5254,77 @@ html[dir="rtl"] .review-card p {
 }
 
 /* =========================================================
-   Control Panel Tables & Users Tab
+   PREMIUM UX REFINEMENTS & GLASSMORPHISM
    ========================================================= */
 
-.panel-table-wrap {
-  overflow-x: auto;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-card);
-  background: #FFFFFF;
+/* Navbar Glassmorphism */
+.header.is-stuck {
+  background: rgba(255, 253, 248, 0.85) !important;
+  backdrop-filter: blur(12px) saturate(180%) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.04) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.4) !important;
 }
 
-.panel-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.88rem;
-  min-width: 640px;
+html[data-theme="dark"] .header.is-stuck {
+  background: rgba(44, 33, 27, 0.85) !important;
+  border-bottom: 1px solid rgba(255,255,255,0.05) !important;
 }
 
-.panel-table thead th {
-  text-align: left;
-  font-family: var(--font-body);
-  font-size: 0.72rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  padding: 12px 14px;
-  border-bottom: 2px solid var(--line);
-  white-space: nowrap;
+/* Product Card Hover & Micro-interactions */
+.cake-card {
+  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease !important;
 }
 
-.panel-table tbody td {
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--line);
-  vertical-align: middle;
+.cake-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.06) !important;
 }
 
-.panel-table tbody tr:last-child td {
-  border-bottom: none;
+.cake-card__img {
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
-.panel-table tbody tr:hover {
-  background-color: var(--shell);
+.cake-card:hover .cake-card__img {
+  transform: scale(1.05) !important;
 }
 
-.badge--staff {
-  background-color: rgba(59, 130, 246, 0.14);
-  color: #1d4ed8;
-  border: 1px solid rgba(59, 130, 246, 0.3);
+.btn {
+  transition: all 0.25s ease !important;
 }
 
-.btn--xs {
-  font-size: 0.76rem;
-  padding: 4px 10px;
-  border-radius: 10px;
-  gap: 5px;
+.btn.is-success {
+  background: var(--color-success, #10b981) !important;
+  color: white !important;
+  pointer-events: none !important;
+  transform: scale(0.95) !important;
 }
 
-.user-perms {
-  display: inline-block;
-  max-width: 180px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: var(--muted);
-  font-size: 0.8rem;
-  vertical-align: middle;
+/* Badges */
+.cake__tag--popular {
+  background: linear-gradient(135deg, #a855f7, #7c3aed) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25) !important;
+}
+.cake__tag--limited {
+  background: linear-gradient(135deg, #f43f5e, #e11d48) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25) !important;
+}
+.cake__tag--sale {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25) !important;
 }
 
-.user-delete-btn {
-  color: #b91c1c !important;
+/* Custom Cake Card */
+.cake-card--custom {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(247,241,232,0.9)) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px dashed var(--brand) !important;
 }
-
-.user-delete-btn:hover {
-  background-color: rgba(185, 28, 28, 0.08) !important;
-  color: #7f1d1d !important;
-}
-
-.user-self-hint {
-  font-size: 0.75rem;
-  color: var(--muted);
-  margin-left: 6px;
-}
-
-/* =========================================================
-   Phone Preview Toggle (Theme & Fonts tabs)
-   ========================================================= */
-
-.phone-preview-bar {
-  display: inline-flex;
-  align-items: center;
-  background-color: var(--shell);
-  border: 1px solid var(--line);
-  padding: 3px;
-  border-radius: var(--radius-pill);
-  margin-bottom: 14px;
-}
-
-.phone-preview-btn {
-  background: transparent;
-  border: none;
-  padding: 5px 12px;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--muted);
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.phone-preview-btn.is-active {
-  background-color: #FFFFFF;
-  color: var(--berry-deep);
-  box-shadow: 0 1px 3px rgba(59, 42, 38, 0.08);
-}
-
-/* Phone frame: fixed device width so admins can see phone typography
-   regardless of how wide the panel modal itself is. */
-.phone-frame {
-  width: 390px;
-  max-width: 100%;
-  margin-inline: auto;
-  border: 1px solid var(--line-strong);
-  border-radius: 28px;
-  padding: 12px;
-  background: var(--cream);
-  box-shadow: var(--shadow-l2), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-  transition: max-width 0.25s ease;
-}
-
-.phone-frame__notch {
-  width: 96px;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--line-strong);
-  margin: 0 auto 10px auto;
-}
-
-/* Scoping: inside the frame, preview content behaves like it would on a
-   390px-wide phone (font sizes from the design system, fluid headings). */
-.phone-frame .theme-preview-card {
-  padding: 18px;
-  gap: 12px;
-}
-
-.phone-frame .theme-preview-card h3 {
-  font-size: clamp(1.25rem, 6vw, 1.6rem);
-  line-height: 1.2;
-}
-
-.phone-frame .theme-preview-card p {
-  font-size: 0.9rem;
-  line-height: 1.7;
-}
-
-.phone-frame .theme-preview-buttons {
-  flex-direction: column;
-  align-items: stretch;
-}
-
-.phone-frame .theme-preview-buttons .btn {
-  justify-content: center;
-}
-
-.phone-frame .font-preview-frame {
-  border-radius: 16px;
-  padding: 16px;
-}
-
-.phone-frame .font-preview-frame h4 {
-  font-size: clamp(1.3rem, 6.5vw, 1.6rem);
-  line-height: 1.35;
-}
-
-.phone-frame .font-preview-frame p {
-  font-size: 0.92rem;
-  line-height: 1.9;
-}
-
-/* =========================================================
-   Real Photos & Icon Tiles (emoji replacement)
-   ========================================================= */
-
-.hero__img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: inherit;
-}
-
-.hero__card {
-  justify-content: flex-start;
-}
-
-.hero__card .hero__badge-fresh {
-  z-index: 2;
-}
-
-/* Soft gradient veil so the fresh badge stays readable over the photo */
-.hero__card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255, 253, 248, 0.12), transparent 40%);
-  pointer-events: none;
-}
-
-.story__visual--photo {
-  position: relative;
-  overflow: hidden;
-  justify-content: flex-end;
-  padding: 0;
-}
-
-.story__img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.story__caption {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  padding: 64px 24px 20px 24px;
-  background: linear-gradient(180deg, rgba(30, 20, 16, 0) 0%, rgba(30, 20, 16, 0.55) 34%, rgba(30, 20, 16, 0.85) 100%);
-  text-align: center;
-}
-
-.story__caption .card__title {
-  display: inline-block;
-  background: rgba(30, 20, 16, 0.62);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  color: #FFFDF8 !important;
-  padding: 6px 16px;
-  border-radius: 999px;
-  margin-bottom: 8px;
-}
-
-.story__caption p {
-  color: rgba(255, 253, 248, 0.9) !important;
-  text-shadow: 0 1px 8px rgba(30, 20, 16, 0.65);
-}
-
-.feature-icon-tile svg {
-  color: var(--berry);
-}
-
-.info-card__icon svg {
-  color: var(--berry);
-}
-
-.panel-tab-btn svg {
-  flex-shrink: 0;
-  opacity: 0.85;
-}
-
-.phone-preview-btn svg {
-  flex-shrink: 0;
-}
-
-/* =========================================================
-   Hero Background Photo + Screen-Size Corrections
-   ========================================================= */
-
-/* Full-bleed real photo behind the hero content */
-.hero-bg-img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  z-index: 0;
-}
-
-/* Warm cream scrim so text stays readable (light theme aware) */
-.hero-bg-veil {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background:
-    linear-gradient(90deg, rgba(247, 241, 232, 0.96) 0%, rgba(247, 241, 232, 0.88) 38%, rgba(247, 241, 232, 0.55) 62%, rgba(247, 241, 232, 0.28) 100%);
-}
-
-[data-theme="dark"] .hero-bg-veil {
-  background:
-    linear-gradient(90deg, rgba(26, 20, 18, 0.97) 0%, rgba(26, 20, 18, 0.9) 38%, rgba(26, 20, 18, 0.6) 62%, rgba(26, 20, 18, 0.32) 100%);
-}
-
-.hero .container {
-  position: relative;
-  z-index: 1;
-}
-
-/* Hide the old flat gradient glow now that a photo provides depth */
-.hero-glow {
-  display: none;
-}
-
-/* ---- Screen-size corrections ---- */
-
-/* Large desktops: cap hero width and photo card height */
-@media (min-width: 1400px) {
-  .hero .container {
-    max-width: 1240px;
-  }
-  .hero__card {
-    max-width: 480px;
-    margin-inline-start: auto;
-  }
-  .hero__title {
-    font-size: clamp(2.6rem, 4.4vw, 4.1rem) !important;
-  }
-}
-
-/* Desktop / large tablet: keep photo card from becoming a tower */
-@media (min-width: 961px) and (max-width: 1399px) {
-  .hero__card {
-    aspect-ratio: 4 / 3;
-    max-height: 520px;
-  }
-}
-
-/* Tablets: two-step grid (3 cols) instead of jumping straight to 1 */
-@media (min-width: 641px) and (max-width: 960px) {
-  .features-grid,
-  .info-cards-grid,
-  .steps-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
-  }
-  .features-grid .feature-card,
-  .info-cards-grid .info-card,
-  .steps-grid .step-card {
-    padding: 18px 14px;
-  }
-  .feature-icon-tile,
-  .info-card__icon {
-    width: 40px;
-    height: 40px;
-    font-size: 1.1rem;
-  }
-  .feature-icon-tile svg,
-  .info-card__icon svg {
-    width: 19px;
-    height: 19px;
-  }
-}
-
-@media (min-width: 641px) and (max-width: 760px) {
-  .features-grid,
-  .info-cards-grid,
-  .steps-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-/* Phones: hero stacks, photo card stays compact */
-@media (max-width: 960px) {
-  .hero-bg-veil {
-    background: linear-gradient(180deg, rgba(247, 241, 232, 0.94) 0%, rgba(247, 241, 232, 0.9) 45%, rgba(247, 241, 232, 0.72) 100%);
-  }
-  [data-theme="dark"] .hero-bg-veil {
-    background: linear-gradient(180deg, rgba(26, 20, 18, 0.95) 0%, rgba(26, 20, 18, 0.92) 45%, rgba(26, 20, 18, 0.75) 100%);
-  }
-  .hero__card {
-    max-width: 420px;
-    margin-inline: auto;
-    aspect-ratio: 4 / 3;
-  }
-  .hero__title {
-    font-size: clamp(2rem, 8.4vw, 3rem) !important;
-  }
-}
-
-@media (max-width: 560px) {
-  .hero__card {
-    max-width: 340px;
-  }
-  .hero__title {
-    font-size: clamp(1.75rem, 8.8vw, 2.4rem) !important;
-  }
-  .hero__ctas .btn {
-    width: 100%;
-  }
+html[data-theme="dark"] .cake-card--custom {
+  background: linear-gradient(135deg, rgba(44,33,27,0.9), rgba(36,25,20,0.9)) !important;
 }

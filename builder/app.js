@@ -5465,6 +5465,9 @@ const app = {
               <select id="pEditTag" class="form-select">
                 <option value="none" ${prod.tag === 'none' ? 'selected' : ''}>None</option>
                 <option value="bestseller" ${prod.tag === 'bestseller' ? 'selected' : ''}>Bestseller</option>
+          <option value="popular" ${prod.tag === 'popular' ? 'selected' : ''}>Popular</option>
+          <option value="limited" ${prod.tag === 'limited' ? 'selected' : ''}>Limited</option>
+          <option value="sale" ${prod.tag === 'sale' ? 'selected' : ''}>Sale</option>
                 <option value="new" ${prod.tag === 'new' ? 'selected' : ''}>New</option>
               </select>
             </div>
