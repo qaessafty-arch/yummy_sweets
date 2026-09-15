@@ -544,7 +544,9 @@
             <label class="form-label" for="custName" data-i18n="labelDisplayName">Your Name / Display Name</label>
             <input type="text" id="custName" class="form-input" placeholder="e.g. Sara" autocomplete="name" />
           </div>
-          <button type="submit" class="btn btn--primary" style="width:100%;margin-top:8px;">Continue with Google / Phone</button>
+          <button type="button" class="btn btn--outline" style="width:100%;margin-top:8px;" onclick="app.handleGoogleLogin('customer')">Sign in with Google</button>
+          <div style="text-align:center;margin:12px 0;color:var(--muted);font-size:0.9rem;">- or -</div>
+          <button type="submit" class="btn btn--primary" style="width:100%;">Continue with Phone</button>
         </form>
 
         <!-- Staff / Operator Login Form (Shared by Admin and Developer tabs, ZERO credential hints) -->
@@ -560,9 +562,9 @@
             <label class="form-label" for="staffPassword" data-i18n="labelPassword">Password</label>
             <input type="password" id="staffPassword" class="form-input" placeholder="••••••••" autocomplete="current-password" />
           </div>
-          <button type="submit" class="btn btn--primary" style="width:100%;margin-top:8px;" id="btnStaffLogin">
-            Login to Dashboard (via Google)
-          </button>
+          <button type="button" class="btn btn--outline" style="width:100%;margin-top:8px;" onclick="app.handleGoogleLogin('staff')">Login with Google</button>
+          <div style="text-align:center;margin:12px 0;color:var(--muted);font-size:0.9rem;">- or -</div>
+          <button type="submit" class="btn btn--primary" style="width:100%;" id="btnStaffLogin">Login with Username</button>
         </form>
       </div>
     </div>

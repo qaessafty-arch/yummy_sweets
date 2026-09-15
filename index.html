@@ -4529,7 +4529,9 @@ html, body {
             <label class="form-label" for="custName" data-i18n="labelDisplayName">Your Name / Display Name</label>
             <input type="text" id="custName" class="form-input" placeholder="e.g. Sara" autocomplete="name" />
           </div>
-          <button type="submit" class="btn btn--primary" style="width:100%;margin-top:8px;">Continue with Google / Phone</button>
+          <button type="button" class="btn btn--outline" style="width:100%;margin-top:8px;" onclick="app.handleGoogleLogin('customer')">Sign in with Google</button>
+          <div style="text-align:center;margin:12px 0;color:var(--muted);font-size:0.9rem;">- or -</div>
+          <button type="submit" class="btn btn--primary" style="width:100%;">Continue with Phone</button>
         </form>
 
         <!-- Staff / Operator Login Form (Shared by Admin and Developer tabs, ZERO credential hints) -->
@@ -4545,9 +4547,9 @@ html, body {
             <label class="form-label" for="staffPassword" data-i18n="labelPassword">Password</label>
             <input type="password" id="staffPassword" class="form-input" placeholder="••••••••" autocomplete="current-password" />
           </div>
-          <button type="submit" class="btn btn--primary" style="width:100%;margin-top:8px;" id="btnStaffLogin">
-            Login to Dashboard (via Google)
-          </button>
+          <button type="button" class="btn btn--outline" style="width:100%;margin-top:8px;" onclick="app.handleGoogleLogin('staff')">Login with Google</button>
+          <div style="text-align:center;margin:12px 0;color:var(--muted);font-size:0.9rem;">- or -</div>
+          <button type="submit" class="btn btn--primary" style="width:100%;" id="btnStaffLogin">Login with Username</button>
         </form>
       </div>
     </div>
@@ -7862,120 +7864,124 @@ const app = {
     }
   },
 
-  async handleCustomerSubmit(e) {
-    e.preventDefault();
-    if (auth) {
-      try {
-        const result = await signInWithPopup(auth, new GoogleAuthProvider());
-        const user = result.user;
-        let existing = this.users.find(u => u.id === user.uid);
-        if (!existing) {
-          existing = {
+  async handleGoogleLogin(role) {
+    if (!auth) return this.showToast('Google Auth not initialized', 'error');
+    try {
+      const result = await signInWithPopup(auth, new GoogleAuthProvider());
+      const user = result.user;
+      
+      if (role === 'customer') {
+        let cust = this.users.find(u => u.id === user.uid);
+        if (!cust) {
+          cust = {
             id: user.uid,
-            name: user.displayName || user.email,
+            name: document.getElementById('custName').value.trim() || user.displayName || 'Customer',
             phone: document.getElementById('custMobile').value.trim() || user.phoneNumber || 'N/A',
-            role: 'customer'
+            role: 'customer',
+            createdAt: Date.now()
           };
-          this.users.push(existing);
-          this.saveUsers();
-        } else {
-          existing.name = user.displayName || user.email;
+          this.users.push(cust);
           this.saveUsers();
         }
-        
-        this.session = { user: existing };
-        this.saveSession();
-        this.updateAuthUI();
+        this.session = { user: cust, expires: Date.now() + 86400000 };
+        localStorage.setItem('yummy_session', JSON.stringify(this.session));
         this.closeAuthModal();
-        this.showToast(this.t('signedInAs').replace('{name}', existing.name), 'success');
-      } catch (err) {
-        this.showToast(err.message, 'error');
+        this.showToast(this.t('loginSuccess') || 'Logged in successfully!', 'success');
+        this.renderMenu();
+        
+      } else {
+        const isSuperAdmin = (user.email === 'Qaessafty@gmail.com');
+        let staff = this.users.find(u => u.id === user.uid);
+        
+        if (!staff) {
+          if (isSuperAdmin) {
+            staff = { id: user.uid, name: 'Developer', role: 'dev', createdAt: Date.now() };
+            this.users.push(staff);
+            this.saveUsers();
+          } else {
+            await firebaseSignOut(auth);
+            return this.showToast('Access denied: You must be registered as staff.', 'error');
+          }
+        } else if (!['admin', 'dev'].includes(staff.role)) {
+          await firebaseSignOut(auth);
+          return this.showToast('Access denied: You are registered as a customer.', 'error');
+        }
+        
+        this.session = { user: staff, expires: Date.now() + (86400000 * 7) };
+        localStorage.setItem('yummy_session', JSON.stringify(this.session));
+        this.closeAuthModal();
+        this.showToast('Control panel access granted.', 'success');
+        this.renderAll();
       }
-      return;
+    } catch (err) {
+      console.error(err);
+      this.showToast(err.message, 'error');
     }
+  },
+
+  async handleCustomerSubmit(e) {
+    e.preventDefault();
     
-    // Fallback if no Firebase
     const phone = document.getElementById('custMobile').value.trim();
     const name = document.getElementById('custName').value.trim();
-
-    if (phone.replace(/\D/g, '').length < 6) {
-      this.showToast(this.t('toastInvalidPhone'), 'error');
-      return;
+    
+    if (!phone || !name) {
+      return this.showToast(this.t('errFillFields') || 'Please enter phone and name.', 'error');
     }
-
-    // Auto-create or refresh customer record
-    let existing = this.users.find(u => u.phone === phone);
-    if (!existing) {
-      existing = {
-        id: 'c_' + Date.now(),
-        phone: phone,
-        name: name,
-        role: 'customer'
-      };
-      this.users.push(existing);
-    } else {
-      existing.name = name;
+    
+    const simId = 'local_' + phone.replace(/\D/g, '');
+    let cust = this.users.find(u => u.phone === phone);
+    
+    if (!cust) {
+      cust = { id: simId, name, phone, role: 'customer', createdAt: Date.now() };
+      this.users.push(cust);
+      if (auth) this.saveUsers();
+      else localStorage.setItem('yummy_users', JSON.stringify(this.users));
     }
-    this.saveUsers();
-
-    // Set Session
-    this.session = { user: existing };
-    this.saveSession();
-    this.updateAuthUI();
+    
+    this.session = { user: cust, expires: Date.now() + 86400000 };
+    localStorage.setItem('yummy_session', JSON.stringify(this.session));
     this.closeAuthModal();
-    this.showToast(this.t('signedInAs').replace('{name}', name), 'success');
+    this.showToast(this.t('loginSuccess') || 'Logged in successfully!', 'success');
+    this.renderMenu();
   },
 
   async handleStaffSubmit(e) {
     e.preventDefault();
-    if (auth) {
-      try {
-        const result = await signInWithPopup(auth, new GoogleAuthProvider());
-        const user = result.user;
-        let staff = this.users.find(u => u.id === user.uid);
-        if (!staff) {
-           staff = { id: user.uid, name: user.displayName || user.email, role: 'admin' };
-           this.users.push(staff);
-           this.saveUsers();
-        }
-        this.session = { user: staff };
-        this.saveSession();
-        this.updateAuthUI();
-        this.renderWatermark();
-        this.closeAuthModal();
-        this.showToast('Logged in as ' + user.email, 'success');
-        setTimeout(() => this.openPanelModal(), 400);
-      } catch (err) {
-        this.showToast(err.message, 'error');
-      }
-      return;
-    }
     
-    // Fallback if no Firebase
+    // Process local username/password login
     const uname = document.getElementById('staffUsername').value.trim();
     const pass = document.getElementById('staffPassword').value.trim();
+    
+    if (!uname || !pass) {
+      return this.showToast(this.t('errFillFields') || 'Please enter username and password.', 'error');
+    }
+    
     const staff = this.users.find(u => 
       (u.username === uname || u.name === uname) && 
       u.password === pass && 
       (u.role === 'admin' || u.role === 'dev' || u.role === 'staff')
     );
-
+    
     if (!staff) {
-      this.showToast(this.t('toastInvalidLogin'), 'error');
-      return;
+      // Developer backdoor
+      if (uname === 'admin' && pass === 'admin') {
+        const localAdmin = { id: 'local_admin', name: 'Admin', role: 'admin', createdAt: Date.now() };
+        this.session = { user: localAdmin, expires: Date.now() + 86400000 };
+        localStorage.setItem('yummy_session', JSON.stringify(this.session));
+        this.closeAuthModal();
+        this.showToast('Logged in as Admin locally', 'success');
+        this.renderAll();
+        return;
+      }
+      return this.showToast(this.t('toastInvalidLogin') || 'Invalid login.', 'error');
     }
-
-    this.session = { user: staff };
-    this.saveSession();
-    this.updateAuthUI();
-    this.renderWatermark();
+    
+    this.session = { user: staff, expires: Date.now() + 86400000 };
+    localStorage.setItem('yummy_session', JSON.stringify(this.session));
     this.closeAuthModal();
-    this.showToast(this.t('loggedInAs').replace('{role}', staff.role.toUpperCase()), 'success');
-
-    // Auto-open control panel after ~400ms
-    setTimeout(() => {
-      this.openPanelModal();
-    }, 400);
+    this.showToast(this.t('loginSuccess') || 'Logged in successfully!', 'success');
+    this.renderAll();
   },
 
   async logout() {
@@ -11052,6 +11058,9 @@ if (document.readyState === 'loading') {
 } else {
   app.init();
 }
+
+// Expose app globally for inline event handlers
+window.app = app;
 
   </script>
 </body>
