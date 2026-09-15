@@ -162,7 +162,8 @@ const DEFAULT_CONFIG = {
   socials: {
     instagram: 'https://instagram.com',
     facebook: 'https://facebook.com',
-    tiktok: 'https://tiktok.com'
+    tiktok: 'https://tiktok.com',
+    snapchat: 'https://snapchat.com'
   },
   iqdRate: IQD_RATE,
   economy: { ...DEFAULT_ECONOMY },
@@ -1303,7 +1304,14 @@ const app = {
       }
       this.saveConfig();
     }
-    // Ensure font settings exist
+    // Ensure socials exist and merge newly added networks for existing configs
+      if (!this.config.socials || typeof this.config.socials !== 'object') {
+        this.config.socials = JSON.parse(JSON.stringify(DEFAULT_CONFIG.socials));
+      } else {
+        this.config.socials = { ...JSON.parse(JSON.stringify(DEFAULT_CONFIG.socials)), ...this.config.socials };
+      }
+
+      // Ensure font settings exist
     if (this.config) {
       if (!this.config.kurdishBodyFont) this.config.kurdishBodyFont = 'Vazirmatn';
       if (!this.config.kurdishDisplayFont) this.config.kurdishDisplayFont = 'Vazirmatn';
@@ -2089,6 +2097,8 @@ const app = {
     if (sFb) sFb.href = c.socials.facebook || '#';
     const sTiktok = document.getElementById('socialTiktok');
     if (sTiktok) sTiktok.href = c.socials.tiktok || '#';
+    const sSnap = document.getElementById('socialSnap');
+    if (sSnap) sSnap.href = c.socials.snapchat || '#';
   },
 
   // Order Tray & WhatsApp Cart
@@ -3297,6 +3307,10 @@ const app = {
             <div class="form-group">
               <label class="form-label">TikTok URL</label>
               <input type="url" id="cfgTiktok" class="form-input" value="${c.socials.tiktok}" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Snapchat URL</label>
+              <input type="url" id="cfgSnap" class="form-input" dir="ltr" value="${this.esc(c.socials.snapchat || '')}" />
             </div>
             <button type="submit" class="btn btn--primary">Save Changes</button>
           </form>
@@ -4789,6 +4803,7 @@ const app = {
     this.config.socials.instagram = document.getElementById('cfgInsta').value.trim();
     this.config.socials.facebook = document.getElementById('cfgFb').value.trim();
     this.config.socials.tiktok = document.getElementById('cfgTiktok').value.trim();
+    this.config.socials.snapchat = document.getElementById('cfgSnap').value.trim();
 
     this.saveConfig();
     this.renderBranding();
