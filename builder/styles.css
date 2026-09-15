@@ -1872,7 +1872,8 @@ body.single-currency #mobileCurrencySwitcher {
 
 .modal-window--large {
   max-width: 960px;
-  height: 820px;
+  height: 85vh;
+  max-height: 800px;
 }
 
 .modal-header {
@@ -2367,9 +2368,9 @@ body.single-currency #mobileCurrencySwitcher {
   grid-template-columns: 1fr;
   gap: 24px;
 }
-@media (min-width: 1100px) {
+@media (min-width: 900px) {
   .theme-panel-layout {
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1.5fr 1fr;
   }
 }
 .theme-presets {
@@ -2377,7 +2378,7 @@ body.single-currency #mobileCurrencySwitcher {
   grid-template-columns: 1fr;
   gap: 12px;
 }
-@media (min-width: 760px) {
+@media (min-width: 600px) {
   .theme-presets {
     grid-template-columns: repeat(2, 1fr);
   }
