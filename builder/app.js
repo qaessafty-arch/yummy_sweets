@@ -685,6 +685,7 @@ const TRANSLATIONS = {
     perm_economy: 'Economy',
     perm_brand: 'Brand & Logo',
     perm_theme: 'Theme',
+    perm_fonts: 'Fonts',
     perm_about: 'About Us',
     perm_contact: 'Contact',
     perm_socials: 'Social Media',
@@ -1035,6 +1036,7 @@ fontPreview: 'Preview',
     perm_economy: 'ئابووری',
     perm_brand: 'براند و لۆگۆ',
     perm_theme: 'ڕووکار',
+    perm_fonts: 'فۆنتەکان',
     perm_about: 'دەربارەی ئێمە',
     perm_contact: 'پەیوەندی',
     perm_socials: 'سۆشیال میدیا',
@@ -3113,7 +3115,7 @@ const app = {
       { id: 'products', label: 'Products', icon: '🎂', devOnly: false },
       { id: 'customers', label: this.t('tabCustomers') || 'Customers', icon: '👥', devOnly: false },
       { id: 'economy', label: this.t('tabEconomy') || 'Economy', icon: '💰', devOnly: false },
-      { id: 'fonts', label: 'Fonts', icon: '🔤', devOnly: true },
+      { id: 'fonts', label: this.t('tabFonts'), icon: '🔤', devOnly: false }, // Admins can adjust fonts too
       { id: 'users', label: 'Users', icon: '🔑', devOnly: false }, // Admins can now see Users
       { id: 'data', label: 'Data', icon: '💾', devOnly: true }
     ];
@@ -3358,8 +3360,12 @@ const app = {
         this.renderProductEditor();
         break;
 
-      case 'fonts':
-        if (!isDev) return;
+      case 'fonts': {
+        const me = this.session && this.session.user ? this.session.user : null;
+        if (!me || (me.role !== 'admin' && me.role !== 'dev')) {
+          content.innerHTML = `<p style="color:var(--muted);">${this.t('usersNoAccess')}</p>`;
+          break;
+        }
         const fontOptions = (selected) => FONT_OPTIONS
           .map(f => `<option value="${f.value}" ${selected === f.value ? 'selected' : ''}>${f.label}</option>`)
           .join('');
@@ -3397,11 +3403,12 @@ const app = {
               <button class="btn btn--primary btn--sm" type="submit">${this.t('saveFonts')}</button>
             </div>
             <div style="font-size:0.8rem;color:var(--muted);margin-top:10px;">
-              1 USD = ${c.iqdRate || IQD_RATE} IQD · Font changes apply live as you select them; click save to persist.
+              Font changes apply live as you select them; click save to persist.
             </div>
           </form>
         `;
         break;
+      }
 
       case 'economy':
         const eco = this.config.economy || DEFAULT_ECONOMY;
