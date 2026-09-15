@@ -2090,15 +2090,21 @@ const app = {
     const footerPhone = document.getElementById('footerPhone');
     if (footerPhone) footerPhone.textContent = c.contact.phone;
 
-    // Social Links
-    const sInsta = document.getElementById('socialInsta');
-    if (sInsta) sInsta.href = c.socials.instagram || '#';
-    const sFb = document.getElementById('socialFb');
-    if (sFb) sFb.href = c.socials.facebook || '#';
-    const sTiktok = document.getElementById('socialTiktok');
-    if (sTiktok) sTiktok.href = c.socials.tiktok || '#';
-    const sSnap = document.getElementById('socialSnap');
-    if (sSnap) sSnap.href = c.socials.snapchat || '#';
+    // Social Links (empty URL = hide the icon instead of linking to a placeholder)
+    const socials = c.socials || {};
+    [
+      ['socialInsta', socials.instagram],
+      ['socialFb', socials.facebook],
+      ['socialTiktok', socials.tiktok],
+      ['socialSnap', socials.snapchat]
+    ].forEach(([id, rawUrl]) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const url = (rawUrl || '').trim();
+      const hasUrl = url !== '' && url !== '#';
+      el.href = hasUrl ? url : '#';
+      el.style.display = hasUrl ? '' : 'none';
+    });
   },
 
   // Order Tray & WhatsApp Cart
@@ -3294,7 +3300,8 @@ const app = {
 
       case 'socials':
         content.innerHTML = `
-          <h4 style="font-family:var(--font-serif);margin-bottom:16px;">Social Media URLs</h4>
+          <h4 style="font-family:var(--font-serif);margin-bottom:6px;">Social Media URLs</h4>
+          <p style="font-size:0.8rem;color:var(--muted);margin:0 0 16px 0;">Leave a field empty to hide its icon in the footer.</p>
           <form onsubmit="app.saveSocialSettings(event)">
             <div class="form-group">
               <label class="form-label">Instagram URL</label>
