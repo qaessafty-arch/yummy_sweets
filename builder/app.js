@@ -3110,20 +3110,23 @@ const app = {
     const isStaff = this.session && this.session.user && this.session.user.role === 'staff';
     const perms = isStaff ? (this.session.user.permissions || []) : null;
 
+    // Inline stroke icons (match the social-icon style) for panel tabs
+    const I = (paths) => `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+
     const tabs = [
-      { id: 'brand', label: 'Brand & Logo', icon: '🎨', devOnly: false },
-      { id: 'theme', label: this.t('tabTheme'), icon: '✨', devOnly: false },
-      { id: 'about', label: 'About Us', icon: '📖', devOnly: false },
-      { id: 'faq', label: 'FAQ', icon: '❓', devOnly: false },
-      { id: 'reviews', label: 'Reviews', icon: '⭐', devOnly: false },
-      { id: 'contact', label: 'Contact', icon: '📞', devOnly: false },
-      { id: 'socials', label: 'Social Media', icon: '📱', devOnly: false },
-      { id: 'products', label: 'Products', icon: '🎂', devOnly: false },
-      { id: 'customers', label: this.t('tabCustomers') || 'Customers', icon: '👥', devOnly: false },
-      { id: 'economy', label: this.t('tabEconomy') || 'Economy', icon: '💰', devOnly: false },
-      { id: 'fonts', label: this.t('tabFonts'), icon: '🔤', devOnly: false }, // Admins can adjust fonts too
-      { id: 'users', label: 'Users', icon: '🔑', devOnly: false }, // Admins can now see Users
-      { id: 'data', label: 'Data', icon: '💾', devOnly: true }
+      { id: 'brand', label: 'Brand & Logo', icon: I('<circle cx="13.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor" stroke="none"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>'), devOnly: false },
+      { id: 'theme', label: this.t('tabTheme'), icon: I('<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/>'), devOnly: false },
+      { id: 'about', label: 'About Us', icon: I('<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>'), devOnly: false },
+      { id: 'faq', label: 'FAQ', icon: I('<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>'), devOnly: false },
+      { id: 'reviews', label: 'Reviews', icon: I('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>'), devOnly: false },
+      { id: 'contact', label: 'Contact', icon: I('<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>'), devOnly: false },
+      { id: 'socials', label: 'Social Media', icon: I('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>'), devOnly: false },
+      { id: 'products', label: 'Products', icon: I('<path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3"/><path d="M12 8v3"/><path d="M17 8v3"/>'), devOnly: false },
+      { id: 'customers', label: this.t('tabCustomers') || 'Customers', icon: I('<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>'), devOnly: false },
+      { id: 'economy', label: this.t('tabEconomy') || 'Economy', icon: I('<circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/>'), devOnly: false },
+      { id: 'fonts', label: this.t('tabFonts'), icon: I('<polyline points="4 7 4 4 20 4 20 7"/><line x1="9" x2="15" y1="20" y2="20"/><line x1="12" x2="12" y1="4" y2="20"/>'), devOnly: false }, // Admins can adjust fonts too
+      { id: 'users', label: 'Users', icon: I('<path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor" stroke="none"/>'), devOnly: false }, // Admins can now see Users
+      { id: 'data', label: 'Data', icon: I('<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/>'), devOnly: true }
     ];
 
     sidebar.innerHTML = tabs
@@ -4052,8 +4055,8 @@ const app = {
     bar.setAttribute('role', 'group');
     bar.setAttribute('aria-label', this.t('phonePreviewLabel'));
     bar.innerHTML = `
-      <button type="button" class="phone-preview-btn is-active" data-phone-mode="desktop">🖥 ${this.t('phonePreviewDesktop')}</button>
-      <button type="button" class="phone-preview-btn" data-phone-mode="phone">📱 ${this.t('phonePreviewPhone')}</button>
+      <button type="button" class="phone-preview-btn is-active" data-phone-mode="desktop"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg> ${this.t('phonePreviewDesktop')}</button>
+      <button type="button" class="phone-preview-btn" data-phone-mode="phone"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg> ${this.t('phonePreviewPhone')}</button>
     `;
     anchorEl.parentNode.insertBefore(bar, anchorEl);
 
@@ -4428,7 +4431,7 @@ const app = {
       <div class="logo-card">
         <div class="logo-card__header">
           <h5 class="logo-card__title">
-            <span>✨</span> <span>${this.t('logoSection')}</span>
+            <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg></span> <span>${this.t('logoSection')}</span>
           </h5>
           <span style="font-size:0.75rem;color:var(--muted);">${this.t('logoFaviconNote')}</span>
         </div>

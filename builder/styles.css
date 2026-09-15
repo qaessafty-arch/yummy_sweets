@@ -5436,3 +5436,91 @@ html[dir="rtl"] .review-card p {
   font-size: 0.92rem;
   line-height: 1.9;
 }
+
+/* =========================================================
+   Real Photos & Icon Tiles (emoji replacement)
+   ========================================================= */
+
+.hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.hero__card {
+  justify-content: flex-start;
+}
+
+.hero__card .hero__badge-fresh {
+  z-index: 2;
+}
+
+/* Soft gradient veil so the fresh badge stays readable over the photo */
+.hero__card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 253, 248, 0.12), transparent 40%);
+  pointer-events: none;
+}
+
+.story__visual--photo {
+  position: relative;
+  overflow: hidden;
+  justify-content: flex-end;
+  padding: 0;
+}
+
+.story__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.story__caption {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 64px 24px 20px 24px;
+  background: linear-gradient(180deg, rgba(30, 20, 16, 0) 0%, rgba(30, 20, 16, 0.55) 34%, rgba(30, 20, 16, 0.85) 100%);
+  text-align: center;
+}
+
+.story__caption .card__title {
+  display: inline-block;
+  background: rgba(30, 20, 16, 0.62);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #FFFDF8 !important;
+  padding: 6px 16px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+
+.story__caption p {
+  color: rgba(255, 253, 248, 0.9) !important;
+  text-shadow: 0 1px 8px rgba(30, 20, 16, 0.65);
+}
+
+.feature-icon-tile svg {
+  color: var(--berry);
+}
+
+.info-card__icon svg {
+  color: var(--berry);
+}
+
+.panel-tab-btn svg {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.phone-preview-btn svg {
+  flex-shrink: 0;
+}
