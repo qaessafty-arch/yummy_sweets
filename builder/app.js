@@ -658,6 +658,41 @@ const TRANSLATIONS = {
     noteSaved: 'Note saved',
     invalidUrl: 'Invalid URL scheme. Only http:// and https:// links are supported.',
     staffAdded: 'Staff user added successfully',
+    usersTitle: 'User & Staff Management',
+    usersAddStaff: 'Add Staff Account',
+    usersSearch: 'Search users…',
+    usersHint: 'Admins manage staff accounts and passwords. Developer and admin accounts are protected.',
+    usersColRole: 'Role',
+    usersColName: 'Name',
+    usersColLogin: 'Username / Phone',
+    usersColPassword: 'Password',
+    usersColPerms: 'Permissions',
+    usersColActions: 'Actions',
+    usersNoPassword: 'Customer — no login',
+    usersYou: '(You)',
+    usersEmpty: 'No users match your search.',
+    usersNoAccess: 'You do not have access to user management.',
+    usersEdit: 'Edit',
+    usersResetPw: 'Reset password',
+    usersDelete: 'Delete',
+    role_admin: 'ADMIN',
+    role_dev: 'DEV',
+    role_staff: 'STAFF',
+    role_customer: 'CUSTOMER',
+    perm_products: 'Products',
+    perm_customers: 'Customers',
+    perm_economy: 'Economy',
+    perm_brand: 'Brand & Logo',
+    perm_theme: 'Theme',
+    perm_about: 'About Us',
+    perm_contact: 'Contact',
+    perm_socials: 'Social Media',
+    editUserTitle: 'Edit User',
+    usersNewPwPrompt: 'New password for {name}:',
+    staffPwTooShort: 'Password must be at least 4 characters.',
+    usersCannotDeleteSelf: 'You cannot delete your own account.',
+    usersCannotDeleteElevated: 'Only the developer can delete admin or developer accounts.',
+    usersConfirmDelete: 'Delete user "{name}"? This cannot be undone.',
     backupImported: 'Backup imported successfully!',
     copiedJson: 'Copied JSON to clipboard!',
     factoryResetDone: 'Reset to factory defaults complete.',
@@ -973,6 +1008,41 @@ fontPreview: 'Preview',
     noteSaved: 'تێبینی پاشەکەوت کرا',
     invalidUrl: 'شێوازی بەستەر هەڵەیە. تەنها بەستەرەکانی http:// و https:// پشتگیری دەکرێن.',
     staffAdded: 'بەکارهێنەری ستاف بە سەرکەوتوویی زیادکرا',
+    usersTitle: 'بەڕێوەبردنی بەکارهێنەران و ستاف',
+    usersAddStaff: 'زیادکردنی ئەژمێری ستاف',
+    usersSearch: 'گەڕان بۆ بەکارهێنەران…',
+    usersHint: 'ئەدمینەکان ئەژمێرەکانی ستاف و تێپەڕەوشەکان بەڕێوە دەبەن. ئەژمێری گەشەپێدەر و ئەدمین پارێزراون.',
+    usersColRole: 'ڕۆڵ',
+    usersColName: 'ناو',
+    usersColLogin: 'ناوی بەکارهێنەر / مۆبایل',
+    usersColPassword: 'تێپەڕەوشە',
+    usersColPerms: 'مۆڵەتەکان',
+    usersColActions: 'کردارەکان',
+    usersNoPassword: 'کڕیار — چوونەژوورەوەی نییە',
+    usersYou: '(تۆ)',
+    usersEmpty: 'هیچ بەکارهێنەرێک نەدۆزرایەوە.',
+    usersNoAccess: 'ڕێگەت نییە بە بەڕێوەبردنی بەکارهێنەران.',
+    usersEdit: 'دەستکاری',
+    usersResetPw: 'گۆڕینی تێپەڕەوشە',
+    usersDelete: 'سڕینەوە',
+    role_admin: 'ئەدمین',
+    role_dev: 'گەشەپێدەر',
+    role_staff: 'ستاف',
+    role_customer: 'کڕیار',
+    perm_products: 'بەرهەمەکان',
+    perm_customers: 'کڕیاران',
+    perm_economy: 'ئابووری',
+    perm_brand: 'براند و لۆگۆ',
+    perm_theme: 'ڕووکار',
+    perm_about: 'دەربارەی ئێمە',
+    perm_contact: 'پەیوەندی',
+    perm_socials: 'سۆشیال میدیا',
+    editUserTitle: 'دەستکاریکردنی بەکارهێنەر',
+    usersNewPwPrompt: 'تێپەڕەوشەی نوێ بۆ {name}:',
+    staffPwTooShort: 'تێپەڕەوشە دەبێت لانیکەم ٤ پیت بێت.',
+    usersCannotDeleteSelf: 'ناتوانیت ئەژمێری خۆت بسڕیتەوە.',
+    usersCannotDeleteElevated: 'تەنها گەشەپێدەر دەتوانێت ئەژمێری ئەدمین و گەشەپێدەر بسڕێتەوە.',
+    usersConfirmDelete: 'دڵنیایی لە سڕینەوەی "{name}"؟ ئەمە ناگەڕێتەوە.',
     backupImported: 'باکئەپ بە سەرکەوتوویی هێنرایە ناوەوە!',
     copiedJson: 'JSON کۆپی کرا بۆ کلیپبۆرد!',
     factoryResetDone: 'گەڕانەوە بۆ باری بنەڕەتی بە سەرکەوتوویی تەواو بوو.',
@@ -1375,6 +1445,16 @@ const app = {
   t(key) {
     const dict = TRANSLATIONS[this.lang] || TRANSLATIONS.en;
     return dict[key] || TRANSLATIONS.en[key] || key;
+  },
+
+  // Escape user-provided strings before interpolating them into HTML templates
+  esc(value) {
+    return String(value ?? '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   },
 
   getEconomy() {
@@ -3560,45 +3640,7 @@ const app = {
         break;
 
       case 'users':
-        if (!isDev) return;
-        content.innerHTML = `
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
-            <h4 style="font-family:var(--font-serif);">User & Staff Management</h4>
-            <button type="button" class="btn btn--primary btn--sm" onclick="app.showAddStaffModal()">+ Add Staff Account</button>
-          </div>
-          <div style="overflow-x:auto;">
-            <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
-              <thead>
-                <tr style="border-bottom:2px solid var(--line);text-align:left;">
-                  <th style="padding:8px;">Role</th>
-                  <th style="padding:8px;">Name</th>
-                  <th style="padding:8px;">Username / Phone</th>
-                  <th style="padding:8px;">Password Mask</th>
-                  <th style="padding:8px;text-align:right;">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${this.users.map(u => {
-                  const isSelf = this.session.user.id === u.id || this.session.user.username === u.username;
-                  const badgeClass = u.role === 'dev' ? 'badge--dev' : (u.role === 'admin' ? 'badge--admin' : (u.role === 'staff' ? 'badge--staff' : 'badge--customer'));
-                  return `
-                    <tr style="border-bottom:1px solid var(--line);">
-                      <td style="padding:8px;"><span class="badge ${badgeClass}">${u.role.toUpperCase()}</span></td>
-                      <td style="padding:8px;font-weight:600;">${u.name || '-'}</td>
-                      <td style="padding:8px;">${u.username || u.phone || '-'}</td>
-                      <td style="padding:8px;color:var(--muted);">${u.password ? '••••••••' : 'N/A (Customer)'}</td>
-                      <td style="padding:8px;text-align:right;">
-                        ${isSelf ? '<span style="font-size:0.75rem;color:var(--muted);">(You)</span>' : `
-                          <button type="button" class="btn btn--ghost btn--sm" style="color:#b91c1c;padding:3px 8px;" onclick="app.deleteUser('${u.id}')">Delete</button>
-                        `}
-                      </td>
-                    </tr>
-                  `;
-                }).join('')}
-              </tbody>
-            </table>
-          </div>
-        `;
+        this.renderUsersTab(content);
         break;
 
       case 'data':
@@ -3765,6 +3807,201 @@ const app = {
   },
 
   // Staff Panel: Customers Management (Section 7.7d)
+  // ─── Users Tab (Admin & Dev) ────────────────────────────────────────────
+  renderUsersTab(content) {
+    if (!content) return;
+    const me = this.session && this.session.user ? this.session.user : null;
+    // Admins and Devs manage users here; staff never reach this tab.
+    if (!me || (me.role !== 'admin' && me.role !== 'dev')) {
+      content.innerHTML = `<p style="color:var(--muted);">${this.t('usersNoAccess')}</p>`;
+      return;
+    }
+
+    const q = (this.userSearchQuery || '').toLowerCase().trim();
+    let list = (this.users || []).slice();
+    if (q) {
+      list = list.filter(u =>
+        (u.name && u.name.toLowerCase().includes(q)) ||
+        (u.username && u.username.toLowerCase().includes(q)) ||
+        (u.phone && u.phone.includes(q))
+      );
+    }
+    // Devs and admins first, then alphabetical
+    const roleOrder = { dev: 0, admin: 1, staff: 2, customer: 3 };
+    list.sort((a, b) => (roleOrder[a.role] ?? 9) - (roleOrder[b.role] ?? 9) || (a.name || '').localeCompare(b.name || ''));
+
+    const canDelete = (u) => {
+      if (me.id === u.id || me.username === u.username) return false; // can't delete yourself
+      if (u.role === 'dev' && me.role !== 'dev') return false;        // admin can't delete dev
+      if (u.role === 'admin' && me.role !== 'dev') return false;      // admin can't delete admin
+      return true;
+    };
+
+    const rowsHtml = list.length === 0
+      ? `<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--muted);">${this.t('usersEmpty')}</td></tr>`
+      : list.map(u => {
+          const isSelf = me.id === u.id || me.username === u.username;
+          const badgeClass = u.role === 'dev' ? 'badge--dev'
+            : u.role === 'admin' ? 'badge--admin'
+            : u.role === 'staff' ? 'badge--staff'
+            : 'badge--customer';
+          const perms = Array.isArray(u.permissions) && u.permissions.length
+            ? u.permissions.map(p => this.t('perm_' + p) || p).join(', ')
+            : '—';
+          return `
+            <tr>
+              <td><span class="badge ${badgeClass}">${this.t('role_' + u.role) || String(u.role).toUpperCase()}</span></td>
+              <td><strong>${this.esc(u.name || '—')}</strong></td>
+              <td dir="ltr">${this.esc(u.username || u.phone || '—')}</td>
+              <td style="color:var(--muted);">${u.password ? '••••••••' : this.t('usersNoPassword')}</td>
+              <td style="max-width:180px;">${u.role === 'staff' ? `<span class="user-perms">${this.esc(perms)}</span>` : '<span class="user-perms">—</span>'}</td>
+              <td style="text-align:right;white-space:nowrap;">
+                ${u.role === 'staff' || (u.role !== 'dev' && canDelete(u)) ? `
+                  <button type="button" class="btn btn--secondary btn--xs" onclick="app.editUser('${u.id}')">${this.t('usersEdit')}</button>
+                ` : ''}
+                ${u.password && canDelete(u) ? `
+                  <button type="button" class="btn btn--secondary btn--xs" onclick="app.resetUserPassword('${u.id}')">${this.t('usersResetPw')}</button>
+                ` : ''}
+                ${canDelete(u) ? `
+                  <button type="button" class="btn btn--ghost btn--xs user-delete-btn" onclick="app.deleteUser('${u.id}')">${this.t('usersDelete')}</button>
+                ` : (isSelf ? `<span class="user-self-hint">${this.t('usersYou')}</span>` : '')}
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+    content.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
+        <h4 style="font-family:var(--font-serif);margin:0;">${this.t('usersTitle')} (${list.length})</h4>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+          <input
+            type="text"
+            class="form-input"
+            style="padding:6px 12px;font-size:0.85rem;width:190px;"
+            placeholder="${this.t('usersSearch')}"
+            value="${this.esc(this.userSearchQuery || '')}"
+            oninput="app.handleUserSearch(this.value)"
+          />
+          <button type="button" class="btn btn--primary btn--sm" onclick="app.showAddStaffModal()">+ ${this.t('usersAddStaff')}</button>
+        </div>
+      </div>
+      <p style="font-size:0.8rem;color:var(--muted);margin:0 0 12px 0;">${this.t('usersHint')}</p>
+      <div class="panel-table-wrap">
+        <table class="panel-table">
+          <thead>
+            <tr>
+              <th>${this.t('usersColRole')}</th>
+              <th>${this.t('usersColName')}</th>
+              <th>${this.t('usersColLogin')}</th>
+              <th>${this.t('usersColPassword')}</th>
+              <th>${this.t('usersColPerms')}</th>
+              <th style="text-align:right;">${this.t('usersColActions')}</th>
+            </tr>
+          </thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      </div>
+    `;
+  },
+
+  handleUserSearch(val) {
+    this.userSearchQuery = val;
+    const content = document.getElementById('panelContent');
+    if (content && this.activePanelTab === 'users') {
+      this.renderUsersTab(content);
+      // Restore focus + caret after re-render
+      const input = content.querySelector('input.form-input');
+      if (input) {
+        input.focus();
+        const pos = input.value.length;
+        input.setSelectionRange(pos, pos);
+      }
+    }
+  },
+
+  editUser(userId) {
+    const u = (this.users || []).find(x => x.id === userId);
+    if (!u) return;
+    const me = this.session && this.session.user ? this.session.user : null;
+    if (me && me.role === 'admin' && (u.role === 'dev' || u.role === 'admin')) return; // admins can only edit staff
+
+    const modal = document.getElementById('editUserModal');
+    if (!modal) return;
+    document.getElementById('editUserId').value = u.id;
+    document.getElementById('editUserName').value = u.name || '';
+    document.getElementById('editUserLogin').value = u.username || u.phone || '';
+    document.getElementById('editUserPermsGroup').style.display = u.role === 'staff' ? 'block' : 'none';
+    const permBoxes = modal.querySelectorAll('input[name="editUserPerms"]');
+    permBoxes.forEach(cb => { cb.checked = Array.isArray(u.permissions) && u.permissions.includes(cb.value); });
+    modal.classList.add('is-open');
+  },
+
+  submitEditUser(e) {
+    e.preventDefault();
+    const id = document.getElementById('editUserId').value;
+    const u = (this.users || []).find(x => x.id === id);
+    if (!u) return;
+    const me = this.session && this.session.user ? this.session.user : null;
+    if (me && me.role === 'admin' && (u.role === 'dev' || u.role === 'admin')) return;
+
+    u.name = document.getElementById('editUserName').value.trim() || u.name;
+    const login = document.getElementById('editUserLogin').value.trim();
+    if (login) {
+      if (u.role === 'customer') u.phone = login; else u.username = login;
+    }
+    if (u.role === 'staff') {
+      const perms = [];
+      document.querySelectorAll('#editUserModal input[name="editUserPerms"]:checked').forEach(cb => perms.push(cb.value));
+      u.permissions = perms;
+    }
+    this.saveUsers();
+    document.getElementById('editUserModal').classList.remove('is-open');
+    const content = document.getElementById('panelContent');
+    if (content && this.activePanelTab === 'users') this.renderUsersTab(content);
+    this.showToast(this.t('toastSaved'), 'success');
+  },
+
+  resetUserPassword(userId) {
+    const u = (this.users || []).find(x => x.id === userId);
+    if (!u || !u.password) return;
+    const me = this.session && this.session.user ? this.session.user : null;
+    if (me && me.role === 'admin' && (u.role === 'dev' || u.role === 'admin')) return;
+    const next = prompt(this.t('usersNewPwPrompt').replace('{name}', u.name || u.username || ''), '');
+    if (next === null) return; // cancelled
+    const pw = next.trim();
+    if (pw.length < 4) {
+      this.showToast(this.t('staffPwTooShort') || 'Password must be at least 4 characters.', 'error');
+      return;
+    }
+    u.password = pw;
+    this.saveUsers();
+    const content = document.getElementById('panelContent');
+    if (content && this.activePanelTab === 'users') this.renderUsersTab(content);
+    this.showToast(this.t('toastSaved'), 'success');
+  },
+
+  deleteUser(userId) {
+    const me = this.session && this.session.user ? this.session.user : null;
+    const u = (this.users || []).find(x => x.id === userId);
+    if (!u) return;
+    if (me && (me.id === u.id || me.username === u.username)) {
+      this.showToast(this.t('usersCannotDeleteSelf'), 'error');
+      return;
+    }
+    if (me && me.role === 'admin' && (u.role === 'dev' || u.role === 'admin')) {
+      this.showToast(this.t('usersCannotDeleteElevated'), 'error');
+      return;
+    }
+    const label = u.name || u.username || u.id;
+    if (!confirm(this.t('usersConfirmDelete').replace('{name}', label))) return;
+
+    this.users = this.users.filter(x => x.id !== userId);
+    this.saveUsers();
+    const content = document.getElementById('panelContent');
+    if (content && this.activePanelTab === 'users') this.renderUsersTab(content);
+    this.showToast(this.t('toastDeleted'), 'success');
+  },
+
   renderCustomersTab(content) {
     if (!content) return;
 
@@ -5410,19 +5647,6 @@ const app = {
     this.renderPanelTab('users');
     this.showToast(this.t('staffAdded') || 'Staff added', 'success');
     document.getElementById('customPromptModal').classList.remove('is-open');
-  },
-
-  deleteUser(userId) {
-    if (this.session && this.session.user && (this.session.user.id === userId || this.session.user.username === userId)) {
-      alert('You cannot delete your own active developer account.');
-      return;
-    }
-    if (!confirm('Are you sure you want to delete this account?')) return;
-
-    this.users = this.users.filter(u => u.id !== userId);
-    this.saveUsers();
-    this.renderPanelTab('users');
-    this.showToast(this.t('toastDeleted'), 'success');
   },
 
   // Data Export / Import / Reset

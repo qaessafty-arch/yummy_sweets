@@ -5252,3 +5252,87 @@ html[dir="rtl"] .review-card p {
   height: 100px !important;
   margin: 0 auto !important;
 }
+
+/* =========================================================
+   Control Panel Tables & Users Tab
+   ========================================================= */
+
+.panel-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: #FFFFFF;
+}
+
+.panel-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  min-width: 640px;
+}
+
+.panel-table thead th {
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--line);
+  white-space: nowrap;
+}
+
+.panel-table tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.panel-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.panel-table tbody tr:hover {
+  background-color: var(--shell);
+}
+
+.badge--staff {
+  background-color: rgba(59, 130, 246, 0.14);
+  color: #1d4ed8;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.btn--xs {
+  font-size: 0.76rem;
+  padding: 4px 10px;
+  border-radius: 10px;
+  gap: 5px;
+}
+
+.user-perms {
+  display: inline-block;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: 0.8rem;
+  vertical-align: middle;
+}
+
+.user-delete-btn {
+  color: #b91c1c !important;
+}
+
+.user-delete-btn:hover {
+  background-color: rgba(185, 28, 28, 0.08) !important;
+  color: #7f1d1d !important;
+}
+
+.user-self-hint {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-left: 6px;
+}

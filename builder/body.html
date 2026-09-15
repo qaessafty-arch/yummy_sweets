@@ -678,3 +678,43 @@
       </div>
     </div>
   </div>
+
+  <!-- Edit User Modal (Users tab) -->
+  <div class="modal-overlay" id="editUserModal" role="dialog" aria-modal="true" aria-labelledby="editUserTitle">
+    <div class="modal-window" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="editUserTitle">Edit User</h3>
+        <button type="button" class="modal-close" onclick="document.getElementById('editUserModal').classList.remove('is-open')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="editUserForm" onsubmit="app.submitEditUser(event)">
+          <input type="hidden" id="editUserId" />
+          <div class="form-group">
+            <label class="form-label" for="editUserName">Display Name</label>
+            <input type="text" id="editUserName" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editUserLogin">Username / Phone</label>
+            <input type="text" id="editUserLogin" class="form-input" dir="ltr" required />
+          </div>
+          <div class="form-group" id="editUserPermsGroup">
+            <label class="form-label">Permissions</label>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+              <label><input type="checkbox" name="editUserPerms" value="products"> Products</label>
+              <label><input type="checkbox" name="editUserPerms" value="customers"> Customers</label>
+              <label><input type="checkbox" name="editUserPerms" value="economy"> Economy (Orders)</label>
+              <label><input type="checkbox" name="editUserPerms" value="brand"> Brand & Logo</label>
+              <label><input type="checkbox" name="editUserPerms" value="theme"> Theme</label>
+              <label><input type="checkbox" name="editUserPerms" value="about"> About Us</label>
+              <label><input type="checkbox" name="editUserPerms" value="contact"> Contact</label>
+              <label><input type="checkbox" name="editUserPerms" value="socials"> Social Media</label>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+            <button type="button" class="btn btn--ghost" onclick="document.getElementById('editUserModal').classList.remove('is-open')">Cancel</button>
+            <button type="submit" class="btn btn--primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
