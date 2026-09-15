@@ -647,7 +647,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero__title {
   max-width: 760px !important;
-  font-size: clamp(2.5rem, 6vw, var(--text-6xl)) !important;
+  font-size: clamp(2.25rem, 5vw, 3.8rem) !important;
   line-height: 1.06 !important;
   overflow-wrap: break-word !important;
 }
@@ -948,53 +948,11 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-muted) !important;
 }
 
-.cake-card__footer .btn {
-  width: 42px !important;
-  height: 42px !important;
-  padding: 0 !important;
-  min-height: auto !important;
 
-  display: grid !important;
-  place-items: center !important;
 
-  border: 0 !important;
-  border-radius: var(--radius-sm) !important;
 
-  color: white !important;
-  background: linear-gradient(
-    135deg,
-    var(--color-terracotta-400),
-    var(--primary)
-  ) !important;
 
-  box-shadow: var(--shadow-primary) !important;
 
-  transition:
-    transform var(--duration-fast) var(--ease-spring),
-    background var(--duration-normal) ease,
-    box-shadow var(--duration-normal) ease !important;
-    
-  font-size: 0 !important;
-}
-
-.cake-card__footer .btn::before {
-  content: "+";
-  font-size: 1.25rem;
-  font-weight: 300;
-  font-family: var(--font-ui);
-}
-
-.cake-card__footer .btn:hover {
-  background: linear-gradient(
-    135deg,
-    var(--primary),
-    var(--primary-hover)
-  ) !important;
-  transform: scale(1.08) !important;
-  box-shadow:
-    0 6px 16px rgba(140, 74, 48, 0.22),
-    0 12px 28px rgba(140, 74, 48, 0.14) !important;
-}
 
 /* =========================================================
    STEP CARDS (How It Works)
@@ -1292,7 +1250,7 @@ h1, h2, h3, h4, h5, h6 {
   width: min(900px, 100%) !important;
   max-width: 900px !important;
   max-height: calc(100dvh - 2rem) !important;
-  overflow-y: auto !important;
+  
   background: var(--bg-elevated) !important;
   color: var(--text-main) !important;
 
@@ -1597,780 +1555,691 @@ html[dir="rtl"] .review-card p {
 }
 
 /* =========================================================
-   EMOJI STYLING UPGRADE
+   COMPREHENSIVE UI & PROPORTIONS SYSTEM
+   Unified, clean, production-ready fixes
    ========================================================= */
 
-.cake-card__emoji {
-  font-size: 3.5rem !important;
-  line-height: 1 !important;
-  background: radial-gradient(circle at top left, var(--color-cream-50), var(--color-cream-200)) !important;
-  padding: 1.5rem !important;
-  border-radius: 50% !important;
-  box-shadow: inset 0 2px 8px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04) !important;
-  border: 1px solid var(--color-cream-300) !important;
+/* ── 1. MODALS & CONTROL PANEL SIZING ────────────────── */
+
+.modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 2500 !important;
+  background: rgba(30, 20, 16, 0.6) !important;
+  backdrop-filter: blur(12px) saturate(130%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(130%) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  width: 100px !important;
-  height: 100px !important;
+  padding: 16px !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: opacity 0.25s ease, visibility 0.25s ease !important;
+}
+
+.modal-overlay.is-open {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.modal-window {
+  width: min(540px, 96vw) !important;
+  max-width: 540px !important;
+  max-height: calc(100dvh - 32px) !important;
+  background: var(--bg-elevated, #FFFEFB) !important;
+  color: var(--text-main, #271C16) !important;
+  border: 1px solid var(--border-default, #E6DDD2) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 16px 48px rgba(39, 28, 22, 0.18) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  transform: translateY(16px) scale(0.98) !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.modal-overlay.is-open .modal-window {
+  transform: translateY(0) scale(1) !important;
+}
+
+/* Control Panel & Large Modals */
+.modal-window--large {
+  width: min(1040px, 96vw) !important;
+  max-width: 1040px !important;
+  height: min(840px, 90dvh) !important;
+  max-height: 90dvh !important;
+  min-height: 540px !important;
+}
+
+.modal-header {
+  padding: 16px 24px !important;
+  border-bottom: 1px solid var(--border-subtle, rgba(39,28,22,0.08)) !important;
+  background: var(--bg-surface, #FFFCF5) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-shrink: 0 !important;
+}
+
+.modal-title {
+  font-family: var(--font-heading, "DM Serif Display", serif) !important;
+  font-size: 1.35rem !important;
+  color: var(--text-main, #271C16) !important;
+  margin: 0 !important;
+}
+
+.modal-close {
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  border: 1px solid var(--border-subtle, rgba(39,28,22,0.1)) !important;
+  background: transparent !important;
+  color: var(--text-muted, #7E6E61) !important;
+  font-size: 1.15rem !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.modal-close:hover {
+  background: rgba(140, 74, 48, 0.08) !important;
+  color: var(--primary, #8C4A30) !important;
+  border-color: rgba(140, 74, 48, 0.25) !important;
+  transform: rotate(90deg) !important;
+}
+
+.modal-body {
+  padding: 24px !important;
+  overflow-y: auto !important;
+  flex: 1 !important;
+}
+
+/* Control Panel Interior Grid */
+.panel-layout {
+  flex: 1 !important;
+  display: grid !important;
+  grid-template-columns: 210px 1fr !important;
+  height: calc(100% - 66px) !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.panel-sidebar {
+  width: 210px !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  border-right: 1px solid var(--border-subtle, rgba(39,28,22,0.08)) !important;
+  background: var(--bg-surface, #FFFCF5) !important;
+  padding: 14px 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+[dir="rtl"] .panel-sidebar {
+  border-right: none !important;
+  border-left: 1px solid var(--border-subtle, rgba(39,28,22,0.08)) !important;
+}
+
+.panel-content {
+  flex: 1 !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 26px 30px !important;
+  background: var(--bg-elevated, #FFFEFB) !important;
+}
+
+.panel-tab-btn {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 14px !important;
+  width: 100% !important;
+  text-align: left !important;
+  font-family: var(--font-ui, "Outfit", sans-serif) !important;
+  font-size: 0.88rem !important;
+  font-weight: 500 !important;
+  color: var(--text-main, #271C16) !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  transition: all 0.18s ease !important;
+  white-space: nowrap !important;
+}
+
+[dir="rtl"] .panel-tab-btn {
+  text-align: right !important;
+}
+
+.panel-tab-btn:hover {
+  background: rgba(140, 74, 48, 0.06) !important;
+  color: var(--primary, #8C4A30) !important;
+}
+
+.panel-tab-btn.is-active {
+  background: rgba(140, 74, 48, 0.12) !important;
+  color: var(--primary, #8C4A30) !important;
+  font-weight: 700 !important;
+}
+
+.panel-tab-btn svg {
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+  stroke: currentColor !important;
+}
+
+/* ── 2. THEME PANEL SIZING & STYLING ─────────────────── */
+
+.theme-panel-layout {
+  display: grid !important;
+  grid-template-columns: 1.15fr 1fr !important;
+  gap: 28px !important;
+  align-items: start !important;
+}
+
+.theme-presets {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.theme-preset-card {
+  border: 1.5px solid var(--border-default, #E6DDD2) !important;
+  border-radius: 14px !important;
+  padding: 14px 16px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  background: var(--bg-surface, #FFFCF5) !important;
+  min-height: 82px !important;
+}
+
+.theme-preset-card:hover {
+  border-color: var(--primary, #8C4A30) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 14px rgba(140, 74, 48, 0.1) !important;
+}
+
+.theme-preset-card.active {
+  border-color: var(--primary, #8C4A30) !important;
+  background: var(--bg-elevated, #FFFEFB) !important;
+  box-shadow: 0 0 0 2px var(--primary, #8C4A30), 0 4px 16px rgba(140, 74, 48, 0.12) !important;
+}
+
+.theme-swatches {
+  display: flex !important;
+  gap: 6px !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+}
+
+.theme-swatch {
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
+  border: 1.5px solid rgba(0,0,0,0.12) !important;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.1) !important;
+  flex-shrink: 0 !important;
+}
+
+.theme-preview-card {
+  border: 1px solid var(--border-default, #E6DDD2) !important;
+  border-radius: 18px !important;
+  padding: 22px !important;
+  background: var(--bg-surface, #FFFCF5) !important;
+  color: var(--text-main, #271C16) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  box-shadow: 0 4px 16px rgba(39, 28, 22, 0.06) !important;
+  transition: all 0.25s ease !important;
+}
+
+.theme-preview-card h3 {
+  font-family: var(--font-heading, "DM Serif Display", serif) !important;
+  font-size: 1.4rem !important;
+  color: var(--primary, #8C4A30) !important;
+  margin: 0 !important;
+}
+
+.theme-preview-card p {
+  font-size: 0.92rem !important;
+  color: var(--text-muted, #7E6E61) !important;
+  margin: 0 !important;
+  line-height: 1.55 !important;
+}
+
+.theme-preview-buttons {
+  display: flex !important;
+  gap: 10px !important;
+  flex-wrap: wrap !important;
+}
+
+.theme-preview-price {
+  font-family: var(--font-heading, serif) !important;
+  font-weight: 700 !important;
+  font-size: 1.15rem !important;
+  color: var(--text-main, #271C16) !important;
+}
+
+.theme-preview-gold {
+  color: var(--accent, #BF9735) !important;
+  letter-spacing: 2px !important;
+  font-size: 0.88rem !important;
+}
+
+/* Phone Preview Bar & Buttons */
+.phone-preview-bar {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  background: var(--bg-surface, #FFFCF5) !important;
+  border: 1px solid var(--border-default, #E6DDD2) !important;
+  border-radius: 999px !important;
+  padding: 4px !important;
+  margin-bottom: 14px !important;
+}
+
+.phone-preview-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 6px 14px !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  font-family: var(--font-ui, "Outfit", sans-serif) !important;
+  color: var(--text-muted, #7E6E61) !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  line-height: 1 !important;
+}
+
+.phone-preview-btn:hover {
+  color: var(--primary, #8C4A30) !important;
+}
+
+.phone-preview-btn.is-active {
+  background: var(--primary, #8C4A30) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 6px rgba(140, 74, 48, 0.2) !important;
+}
+
+.phone-preview-btn svg {
+  width: 13px !important;
+  height: 13px !important;
+  stroke: currentColor !important;
+}
+
+/* Phone Frame simulation */
+.phone-frame {
+  max-width: 360px !important;
   margin: 0 auto !important;
+  border: 10px solid #1E1410 !important;
+  border-radius: 36px !important;
+  box-shadow: 0 16px 42px rgba(30, 20, 16, 0.25) !important;
+  overflow: hidden !important;
+  position: relative !important;
+  background: var(--bg-surface, #FFFCF5) !important;
 }
 
-/* =========================================================
-   PREMIUM UX REFINEMENTS & GLASSMORPHISM
-   ========================================================= */
-
-/* Navbar Glassmorphism */
-.header.is-stuck {
-  background: rgba(255, 253, 248, 0.85) !important;
-  backdrop-filter: blur(12px) saturate(180%) !important;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.04) !important;
-  border-bottom: 1px solid rgba(255,255,255,0.4) !important;
+.phone-frame__notch {
+  width: 110px !important;
+  height: 18px !important;
+  background: #1E1410 !important;
+  border-radius: 0 0 12px 12px !important;
+  margin: 0 auto -18px !important;
+  position: relative !important;
+  z-index: 5 !important;
 }
 
-html[data-theme="dark"] .header.is-stuck {
-  background: rgba(44, 33, 27, 0.85) !important;
-  border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+/* ── 3. BUTTON SYSTEM REFINEMENT ──────────────────────── */
+
+.btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  font-family: var(--font-ui, "Outfit", sans-serif) !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  border-radius: 999px !important;
+  cursor: pointer !important;
+  border: 1px solid transparent !important;
+  transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.18s ease,
+              background 0.18s ease,
+              border-color 0.18s ease,
+              color 0.18s ease !important;
+  line-height: 1.25 !important;
+  white-space: nowrap !important;
+  user-select: none !important;
 }
 
-/* Product Card Hover & Micro-interactions */
+.btn:active {
+  transform: scale(0.97) !important;
+}
+
+/* Primary Button */
+.btn--primary {
+  background: linear-gradient(135deg, var(--color-terracotta-400, #A86243), var(--primary, #8C4A30)) !important;
+  color: #FFFFFF !important;
+  border-color: var(--primary, #8C4A30) !important;
+  box-shadow: 0 3px 10px rgba(140, 74, 48, 0.2) !important;
+}
+
+.btn--primary:hover {
+  background: linear-gradient(135deg, var(--primary, #8C4A30), var(--primary-hover, #733D28)) !important;
+  box-shadow: 0 6px 18px rgba(140, 74, 48, 0.28) !important;
+  transform: translateY(-1.5px) !important;
+}
+
+/* Secondary Button */
+.btn--secondary {
+  background: var(--bg-surface, #FFFCF5) !important;
+  color: var(--text-main, #271C16) !important;
+  border-color: var(--border-default, #E6DDD2) !important;
+  box-shadow: 0 1px 4px rgba(39, 28, 22, 0.05) !important;
+}
+
+.btn--secondary:hover {
+  background: #FFFFFF !important;
+  border-color: var(--primary, #8C4A30) !important;
+  color: var(--primary, #8C4A30) !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 4px 12px rgba(140, 74, 48, 0.1) !important;
+}
+
+/* Ghost Button */
+.btn--ghost {
+  background: transparent !important;
+  color: var(--text-main, #271C16) !important;
+  border-color: var(--border-default, #E6DDD2) !important;
+}
+
+.btn--ghost:hover {
+  background: rgba(140, 74, 48, 0.06) !important;
+  border-color: var(--primary, #8C4A30) !important;
+  color: var(--primary, #8C4A30) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Light Button */
+.btn--light {
+  background: #FFFFFF !important;
+  color: var(--text-main, #271C16) !important;
+  border-color: rgba(255, 255, 255, 0.8) !important;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08) !important;
+}
+
+.btn--light:hover {
+  background: var(--bg-surface, #FFFCF5) !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* Button Sizes */
+.btn:not(.btn--sm):not(.btn--xs):not(.btn--lg):not(.switch-btn):not(.burger-btn):not(.modal-close):not(.panel-tab-btn):not(.phone-preview-btn) {
+  min-height: 44px !important;
+  padding: 10px 22px !important;
+  font-size: 0.92rem !important;
+}
+
+.btn--lg {
+  min-height: 50px !important;
+  padding: 14px 28px !important;
+  font-size: 1rem !important;
+}
+
+.btn--sm {
+  min-height: 34px !important;
+  padding: 6px 14px !important;
+  font-size: 0.82rem !important;
+}
+
+.btn--xs {
+  min-height: 28px !important;
+  padding: 4px 10px !important;
+  font-size: 0.76rem !important;
+  gap: 4px !important;
+}
+
+/* User Delete Button in Table */
+.user-delete-btn {
+  color: #B24538 !important;
+  border-color: rgba(178, 69, 56, 0.3) !important;
+  background: transparent !important;
+}
+
+.user-delete-btn:hover {
+  background: rgba(178, 69, 56, 0.08) !important;
+  border-color: #B24538 !important;
+  color: #B24538 !important;
+}
+
+/* Tray Details Button */
+.tray-details-btn {
+  color: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.tray-details-btn:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  color: #FFFFFF !important;
+}
+
+/* Header User Chip Buttons */
+.user-chip {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: var(--bg-surface, #FFFCF5) !important;
+  border: 1px solid var(--border-default, #E6DDD2) !important;
+  padding: 4px 10px 4px 8px !important;
+  border-radius: 999px !important;
+  font-size: 0.84rem !important;
+}
+
+.user-chip .btn {
+  min-height: 26px !important;
+  height: 26px !important;
+  padding: 2px 8px !important;
+  font-size: 0.76rem !important;
+  line-height: 1 !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--border-default, #E6DDD2) !important;
+  background: #FFFFFF !important;
+  color: var(--text-main, #271C16) !important;
+}
+
+.user-chip .btn:hover {
+  border-color: var(--primary, #8C4A30) !important;
+  color: var(--primary, #8C4A30) !important;
+}
+
+/* Storefront Card Add Button — Fully Restored & Beautiful */
+.cake-card__footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 8px !important;
+  margin-top: auto !important;
+  padding-top: 10px !important;
+  border-top: 1px solid var(--border-subtle, rgba(39,28,22,0.06)) !important;
+}
+
+.cake-card__footer .btn {
+  width: auto !important;
+  min-width: 68px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  padding: 5px 14px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  border-radius: 999px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: #FFFFFF !important;
+  background: linear-gradient(135deg, var(--color-terracotta-400, #A86243), var(--primary, #8C4A30)) !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(140, 74, 48, 0.18) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.cake-card__footer .btn:hover {
+  background: linear-gradient(135deg, var(--primary, #8C4A30), var(--primary-hover, #733D28)) !important;
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 4px 12px rgba(140, 74, 48, 0.25) !important;
+}
+
+/* ── 4. PRODUCT CARD VISUAL HARMONY ──────────────────── */
+
 .cake-card {
-  transition: transform 0.3s var(--ease-spring), box-shadow 0.3s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  background: var(--bg-surface, #FFFCF5) !important;
+  border: 1px solid var(--border-subtle, rgba(39,28,22,0.08)) !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 10px rgba(39, 28, 22, 0.04) !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease !important;
 }
 
 .cake-card:hover {
   transform: translateY(-4px) !important;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.06) !important;
+  box-shadow: 0 10px 28px rgba(39, 28, 22, 0.08) !important;
+  border-color: rgba(191, 151, 53, 0.25) !important;
+}
+
+.cake-card__media {
+  position: relative !important;
+  overflow: hidden !important;
+  margin: 8px !important;
+  border-radius: 14px !important;
+  background: var(--bg-elevated, #FFFEFB) !important;
 }
 
 .cake-card__img {
-  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  aspect-ratio: 4 / 5 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center top !important;
+  display: block !important;
+  transition: transform 0.4s ease !important;
 }
 
 .cake-card:hover .cake-card__img {
-  transform: scale(1.05) !important;
+  transform: scale(1.04) !important;
 }
 
-.btn {
-  transition: all 0.25s ease !important;
-}
-
-.btn.is-success {
-  background: var(--color-success, #10b981) !important;
-  color: white !important;
-  pointer-events: none !important;
-  transform: scale(0.95) !important;
-}
-
-/* Badges */
-.cake__tag--popular {
-  background: linear-gradient(135deg, #a855f7, #7c3aed) !important;
-  color: #FFFFFF !important;
-  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25) !important;
-}
-.cake__tag--limited {
-  background: linear-gradient(135deg, #f43f5e, #e11d48) !important;
-  color: #FFFFFF !important;
-  box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25) !important;
-}
-.cake__tag--sale {
-  background: linear-gradient(135deg, #10b981, #059669) !important;
-  color: #FFFFFF !important;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25) !important;
-}
-
-/* Custom Cake Card */
-.cake-card--custom {
+.cake-card__emoji {
+  font-size: 3rem !important;
+  width: 76px !important;
+  height: 76px !important;
+  background: radial-gradient(circle at top left, var(--bg-elevated, #FFFEFB), var(--bg-surface, #FAF5ED)) !important;
+  border: 1px solid var(--border-default, #E6DDD2) !important;
+  border-radius: 50% !important;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.03), 0 4px 12px rgba(0,0,0,0.04) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(247,241,232,0.9)) !important;
-  backdrop-filter: blur(8px) !important;
-  border: 1px dashed var(--brand) !important;
-}
-html[data-theme="dark"] .cake-card--custom {
-  background: linear-gradient(135deg, rgba(44,33,27,0.9), rgba(36,25,20,0.9)) !important;
+  margin: 0 auto !important;
+  line-height: 1 !important;
 }
 
-/* =============================================================
-   PROPORTION CORRECTIONS — Targeted fixes only
-   Applies AFTER all existing CSS. Fixes measurements without
-   changing design identity, colors, or components.
-   ============================================================= */
-
-/* ── 1. TYPOGRAPHY SCALE CORRECTIONS ──────────────────────── */
-
-/* Hero title: clamp(2.5rem,6vw,5.5rem) = 84px at 1400px → too large
-   Bring max down to 68px (4.25rem) which is balanced at large screens */
-.hero__title {
-  font-size: clamp(2.25rem, 5.2vw, 4.25rem) !important;
-  max-width: 640px !important;           /* tighter, more readable column */
+.cake-card__body {
+  padding: 10px 14px 14px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  gap: 4px !important;
 }
 
-/* Section titles: clamp(1.9rem,4.4vw,3.2rem) is acceptable baseline,
-   user_css doesn't override font-size — KEEP. */
-
-/* Product card title: 1.35rem with DM Serif Display weight-400 is
-   too large for a card tile. 1.05–1.1rem reads clean in a grid. */
 .cake-card__title {
-  font-size: clamp(0.95rem, 1.2vw, 1.05rem) !important;
-  font-weight: 500 !important;          /* slight weight to add presence */
-  line-height: 1.4 !important;
-  min-height: 2.4em !important;         /* consistent card height across rows */
+  font-family: var(--font-heading, "DM Serif Display", serif) !important;
+  font-size: 1.05rem !important;
+  font-weight: 500 !important;
+  line-height: 1.35 !important;
+  color: var(--text-main, #271C16) !important;
+  margin: 0 !important;
+  min-height: 2.7em !important;
   display: -webkit-box !important;
   -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
 }
 
-/* Lead paragraph: bring max closer to 1.05rem, max-width tighter */
-.lead {
-  font-size: clamp(0.95rem, 1.5vw, 1.05rem) !important;
-  max-width: 480px !important;
-  margin-top: 1.25rem !important;
-  line-height: 1.8 !important;
-}
-
-/* Review card quote: 1.2rem italic is bloated for a card */
-.review-card p {
-  font-size: 0.95rem !important;
-  line-height: 1.65 !important;
-}
-
-/* Eyebrow pill: fine as is, slightly reduce letter-spacing */
-.eyebrow {
-  letter-spacing: 0.10em !important;
-}
-
-/* ── 2. HERO SECTION PROPORTIONS ──────────────────────────── */
-
-/* min-height: clamp(560px, 85vh, 920px) → at 900px laptop = 765px
-   which eats the whole viewport. Cap at 75vh and min at 520px. */
-.hero {
-  min-height: clamp(520px, 75vh, 800px) !important;
-  padding-top: calc(var(--header-height) + 40px) !important;
-  padding-bottom: 64px !important;
-}
-
-/* Hero grid: 0.9fr 1.1fr is slightly off — use 1fr 1fr
-   for a balanced 50/50 image + content split */
-.hero__grid {
-  grid-template-columns: 1fr 1fr !important;
-  gap: clamp(2rem, 5vw, 5rem) !important;
-  align-items: center !important;
-}
-
-/* Hero card image: aspect-ratio 4/5 is good.
-   But add a max-height so it doesn't tower the layout. */
-.hero__card {
-  max-height: 560px !important;
-}
-
-.hero__card img {
-  width: 100% !important;
-  height: 100% !important;
-  max-height: 560px !important;
-}
-
-/* Floating review badge: was overflowing below card.
-   Constrain it. */
-.hero__float-review {
-  max-width: 220px !important;
-  right: -12px !important;
-  bottom: -16px !important;
-}
-
-/* ── 3. SECTION PADDING CORRECTIONS ──────────────────────── */
-
-/* clamp(4rem,10vw,6rem) at 1200px = 120px — too tall.
-   Professional section padding: 64–96px desktop. */
-.section {
-  padding-block: clamp(56px, 7vw, 96px) !important;
-}
-
-/* ── 4. PRODUCT GRID CORRECTIONS ───────────────────────────── */
-
-/* 4 columns is correct on wide desktop */
-.menu-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 1.25rem !important;
-}
-
-/* Product card image aspect ratio: 1/1.05 is nearly square
-   which is fine. Enforce it strictly for uniform card heights */
-.cake-card__media {
-  margin: 0.5rem !important;
-  border-radius: 14px !important;
-}
-
-.cake-card__img {
-  aspect-ratio: 4 / 5 !important;        /* portrait crop: shows cake nicely */
-  width: 100% !important;
-  display: block !important;
-  object-position: center top !important; /* keep cake tops in frame */
-}
-
-/* Card body: tighten the padding to keep cards compact */
-.cake-card__body {
-  padding: 0.75rem 1rem 1rem !important;
-  gap: 0.3rem !important;
-}
-
-/* Card description: 2-line clamp is good, just reduce font-size */
 .cake-card__desc {
   font-size: 0.8rem !important;
-  line-height: 1.55 !important;
+  color: var(--text-muted, #7E6E61) !important;
+  line-height: 1.5 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  margin-top: 2px !important;
+  margin-bottom: 6px !important;
 }
 
-/* Price: readable but not dominant */
 .price-wrap .price {
-  font-size: 1rem !important;
+  font-family: var(--font-ui, "Outfit", sans-serif) !important;
+  font-size: 1.05rem !important;
   font-weight: 700 !important;
+  color: var(--text-main, #271C16) !important;
 }
 
-/* Add button: square at 38px — professional icon button size */
-.cake-card__footer .btn {
-  width: 38px !important;
-  height: 38px !important;
+.price-wrap .price-unit {
+  font-size: 0.72rem !important;
+  color: var(--text-muted, #7E6E61) !important;
 }
 
-/* ── 5. EMOJI PLACEHOLDER FIX ──────────────────────────────── */
-
-/* Previous CSS created a 100px circle — too large and uses
-   undefined --color-cream-* vars. Replace with simpler, correct sizing. */
-.cake-card__emoji {
-  font-size: 3rem !important;
-  width: 80px !important;
-  height: 80px !important;
-  padding: 1rem !important;
-  background: var(--bg-surface, #FFFCF5) !important;
-  border: 1px solid var(--border-subtle, rgba(39,28,22,0.06)) !important;
-  box-shadow: 0 2px 8px rgba(39,28,22,0.04) !important;
-  border-radius: 50% !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  margin: 0 auto !important;
-  line-height: 1 !important;
-}
-
-/* ── 6. BUTTON PROPORTIONS ─────────────────────────────────── */
-
-/* Default btn: min-height:48px is fine. Padding inline 1.4rem is fine.
-   Just ensure font size is consistent. */
-.btn {
-  font-size: 0.875rem !important;       /* 14px — industry standard */
-  min-height: 46px !important;
-  padding-inline: 1.25rem !important;
-}
-
-/* Large CTA buttons */
-.btn--lg {
-  min-height: 52px !important;
-  padding-inline: 1.75rem !important;
-  font-size: 0.9375rem !important;      /* 15px */
-}
-
-/* Small buttons */
-.btn--sm {
-  min-height: 36px !important;
-  padding-inline: 0.875rem !important;
-  font-size: 0.8125rem !important;
-}
-
-/* ── 7. NAVBAR PROPORTIONS ─────────────────────────────────── */
-
-/* Header height: 78px is slightly tall. 68px desktop is balanced. */
-:root {
-  --header-height: 68px !important;
-}
-
-.header__inner {
-  height: var(--header-height) !important;
-}
-
-/* Brand name: 1.5rem is reasonable. Keep. */
-/* Nav links: 0.875rem (var(--text-sm)) is good. Keep. */
-
-/* ── 8. SECTION HEADINGS ────────────────────────────────────── */
-
-/* Section header max-width: 680px is fine on desktop.
-   Center section title underline correctly. */
-.section-header {
-  max-width: 640px !important;
-  margin-bottom: clamp(32px, 4.5vw, 48px) !important;
-}
-
-/* ── 9. FEATURE / STEP / REVIEW CARD GRIDS ─────────────────── */
-
-/* On laptop 1024px: 3 columns is correct. Keep. */
-/* On tablet 768px: collapse to 2 columns */
-.features-grid {
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 1.25rem !important;
-}
-
-.steps-grid {
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 1.25rem !important;
-}
-
-.reviews-grid,
-.reviews__grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 1.25rem !important;
-}
-
-/* Card padding: 2rem is slightly generous. 1.5rem is balanced. */
-.feature-card,
-.step-card,
-.review-card {
-  padding: 1.5rem 1.25rem !important;
-}
-
-/* ── 10. FOOTER COLUMN HEADINGS ──────────────────────────── */
-
-/* Was 45% opacity — unreadable. Already partially fixed in styles.css.
-   Fully correct it here. */
-.site-footer h4,
-.footer__col h4,
-.footer__brand-col h4 {
-  color: rgba(250, 240, 230, 0.9) !important;
-}
-
-/* ── 11. HERO BACKGROUND IMAGE HANDLING ─────────────────── */
-
-/* The hero-bg-img is an absolutely positioned full-bleed image.
-   Ensure it covers correctly without distortion. */
-.hero-bg-img {
-  position: absolute !important;
-  inset: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: cover !important;
-  object-position: center center !important;
-  z-index: 0 !important;
-  pointer-events: none !important;
-}
-
-/* Veil: keep it readable but visible */
-.hero-bg-veil {
-  position: absolute !important;
-  inset: 0 !important;
-  z-index: 1 !important;
-  background: linear-gradient(
-    135deg,
-    rgba(39, 28, 22, 0.52) 0%,
-    rgba(39, 28, 22, 0.32) 50%,
-    rgba(39, 28, 22, 0.18) 100%
-  ) !important;
-  pointer-events: none !important;
-}
-
-/* Hero content needs to be above the image */
-.hero__grid,
-.hero .container {
-  position: relative !important;
-  z-index: 2 !important;
-}
-
-/* Hero text readable over dark veil */
-.hero__title {
-  color: #FFFCF5 !important;
-  text-shadow: 0 2px 16px rgba(39, 28, 22, 0.25) !important;
-}
-
-.hero .lead {
-  color: rgba(255, 252, 245, 0.88) !important;
-}
-
-.hero .eyebrow {
-  color: var(--accent) !important;
-  background: rgba(191, 151, 53, 0.15) !important;
-  border-color: rgba(191, 151, 53, 0.25) !important;
-}
-
-/* Hero card: hide the emoji placeholder card on desktop when
-   bg image is present, since the photo IS the hero visual */
-.hero .hero__card {
-  background: rgba(255, 252, 245, 0.06) !important;
-  backdrop-filter: blur(8px) !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
-}
-
-/* ── 12. CONTAINER CONSISTENCY ─────────────────────────────── */
-
-/* Use 1200px as consistent max-width throughout */
-.container {
-  width: min(calc(100% - 2.5rem), 1200px) !important;
-}
-
-/* ── 13. RESPONSIVE GRID CORRECTIONS ────────────────────────── */
-
-@media (max-width: 1100px) {
-  .menu-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 1rem !important;
-  }
-  .features-grid,
-  .steps-grid {
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
-  .reviews-grid,
-  .reviews__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
+/* ── 5. MOBILE & RESPONSIVE BEHAVIOR ─────────────────── */
 
 @media (max-width: 959px) {
-  :root {
-    --header-height: 62px !important;
+  .modal-window--large {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
   }
 
-  .menu-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 1rem !important;
-  }
-
-  .hero {
-    min-height: auto !important;
-    padding-block: calc(var(--header-height) + 2rem) 3.5rem !important;
-  }
-
-  .hero__grid {
-    grid-template-columns: 1fr !important;
-    text-align: center !important;
-  }
-
-  .hero__content {
-    align-items: center !important;
-    max-width: 600px !important;
-    margin-inline: auto !important;
-  }
-
-  .hero__title {
-    max-width: 100% !important;
-    font-size: clamp(2rem, 7vw, 3rem) !important;
-  }
-
-  .hero .lead {
-    max-width: 520px !important;
-  }
-
-  .hero__visual {
-    display: none !important;           /* hide floating card on tablet — bg image is the visual */
-  }
-
-  .hero__trust,
-  .hero__ctas {
-    justify-content: center !important;
-  }
-
-  .features-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-
-  .steps-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-
-  .reviews-grid,
-  .reviews__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .story__grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .info-cards-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-
-  .hero-bg-img {
-    object-position: center 30% !important; /* show food, not edges, on portrait crop */
-  }
-}
-
-@media (max-width: 768px) {
-  .features-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .steps-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .info-cards-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .footer__grid {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 2rem !important;
-  }
-}
-
-@media (max-width: 560px) {
-  .container {
-    width: min(calc(100% - 1.25rem), 1200px) !important;
-  }
-
-  .menu-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;  /* keep 2-col on phones */
-    gap: 0.625rem !important;
-  }
-
-  .cake-card__body {
-    padding: 0.625rem 0.75rem 0.875rem !important;
-  }
-
-  .cake-card__title {
-    font-size: 0.875rem !important;
-    min-height: auto !important;
-  }
-
-  .cake-card__desc {
-    display: none !important;           /* hide desc on very small cards */
-  }
-
-  .cake-card__footer {
-    flex-direction: row !important;
-    align-items: center !important;
-  }
-
-  .price-wrap .price {
-    font-size: 0.9375rem !important;
-  }
-
-  .reviews-grid,
-  .reviews__grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .section {
-    padding-block: 48px !important;
-  }
-
-  .hero {
-    padding-block: calc(var(--header-height) + 1.5rem) 3rem !important;
-  }
-
-  .hero__title {
-    font-size: clamp(1.875rem, 8vw, 2.5rem) !important;
-  }
-
-  .hero-bg-img {
-    object-position: 60% center !important;
-  }
-
-  .hero-bg-veil {
-    background: rgba(39, 28, 22, 0.60) !important; /* slightly stronger on small screens */
-  }
-
-  .footer__grid {
-    grid-template-columns: 1fr !important;
-    gap: 1.5rem !important;
-  }
-
-  .btn {
-    min-height: 48px !important;       /* comfortable touch targets on mobile */
-  }
-}
-
-@media (max-width: 360px) {
-  .menu-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .hero__title {
-    font-size: 1.875rem !important;
-  }
-}
-
-
-/* =============================================================
-   PANEL & BUTTON TARGETED FIXES
-   ============================================================= */
-
-/* 1. CONTROL PANEL MODAL � restore correct size */
-.modal-window--large {
-  max-width: 980px !important;
-  width: min(980px, 96vw) !important;
-  height: min(860px, 92dvh) !important;
-  max-height: 92dvh !important;
-}
-
-/* Ensure the panel layout fills the modal correctly */
-.panel-layout {
-  grid-template-columns: 200px 1fr !important;
-  height: 100% !important;
-  min-height: 0 !important;
-}
-
-/* Panel sidebar: fixed column, scrollable */
-.panel-sidebar {
-  width: 200px !important;
-  min-width: 200px !important;
-  overflow-y: auto !important;
-  height: 100% !important;
-}
-
-/* Panel content: fills remaining space */
-.panel-content {
-  overflow-y: auto !important;
-  height: 100% !important;
-  padding: 24px !important;
-}
-
-/* 2. BUTTON FIXES � restore small/utility buttons */
-
-/* Remove forced min-height from ALL buttons � it breaks sm variants */
-.btn {
-  min-height: unset !important;
-}
-
-/* Now set correct sizes per variant */
-.btn:not(.btn--sm):not(.btn--lg):not(.panel-tab-btn):not(.switch-btn):not(.burger-btn):not(.tray-breakdown__close) {
-  min-height: 44px !important;
-  padding-block: 0 !important;
-}
-
-.btn--lg {
-  min-height: 50px !important;
-  padding-inline: 1.75rem !important;
-}
-
-/* btn--sm: small utility buttons � compact but visible */
-.btn--sm {
-  min-height: 34px !important;
-  padding: 6px 14px !important;
-  font-size: 0.8125rem !important;
-  line-height: 1.4 !important;
-}
-
-/* Tiny inline user-chip buttons (padding:4px 8px in JS) */
-.user-chip .btn,
-.user-chip .btn--sm,
-[style*="padding:4px"] .btn,
-.btn[style*="padding:4px"] {
-  min-height: 30px !important;
-  padding: 4px 10px !important;
-}
-
-/* Switch buttons in header */
-.switch-btn {
-  min-height: unset !important;
-  padding: 5px 10px !important;
-}
-
-/* Burger button */
-.burger-btn {
-  min-height: unset !important;
-  padding: 8px !important;
-}
-
-/* 3. PANEL TAB BUTTONS � sidebar nav items */
-.panel-tab-btn {
-  min-height: unset !important;
-  padding: 10px 14px !important;
-  width: 100% !important;
-  text-align: left !important;
-  font-size: 0.875rem !important;
-  display: flex !important;
-  align-items: center !important;
-  gap: 8px !important;
-  border-radius: 10px !important;
-  border: none !important;
-  background: transparent !important;
-  cursor: pointer !important;
-  color: var(--text-main) !important;
-  transition: background 0.18s ease, color 0.18s ease !important;
-  white-space: nowrap !important;
-}
-
-.panel-tab-btn:hover {
-  background: rgba(140, 74, 48, 0.06) !important;
-  color: var(--primary) !important;
-}
-
-.panel-tab-btn.is-active {
-  background: rgba(140, 74, 48, 0.10) !important;
-  color: var(--primary) !important;
-  font-weight: 600 !important;
-  box-shadow: none !important;
-}
-
-/* SVG icons inside panel tab buttons */
-.panel-tab-btn svg,
-.panel-tab-btn span svg {
-  width: 16px !important;
-  height: 16px !important;
-  flex-shrink: 0 !important;
-  color: currentColor !important;
-}
-
-/* 4. MODAL HEADER & CLOSE BUTTON */
-.modal-header {
-  padding: 16px 24px !important;
-  flex-shrink: 0 !important;
-}
-
-.modal-close {
-  min-height: unset !important;
-  width: 32px !important;
-  height: 32px !important;
-  padding: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-radius: 50% !important;
-  border: 1px solid var(--border-subtle) !important;
-  background: transparent !important;
-  cursor: pointer !important;
-  color: var(--text-muted) !important;
-  font-size: 1.1rem !important;
-  transition: all 0.18s ease !important;
-}
-
-.modal-close:hover {
-  background: rgba(140, 74, 48, 0.08) !important;
-  color: var(--primary) !important;
-  border-color: rgba(140, 74, 48, 0.2) !important;
-}
-
-/* 5. THEME PANEL SIZE FIX */
-.theme-panel-layout {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  gap: 20px !important;
-}
-
-@media (min-width: 700px) {
-  .theme-panel-layout {
-    grid-template-columns: 1.6fr 1fr !important;
-  }
-}
-
-/* 6. MOBILE PANEL � keep sidebar horizontal */
-@media (max-width: 959px) {
   .panel-layout {
     grid-template-columns: 1fr !important;
     grid-template-rows: auto 1fr !important;
-    height: 100dvh !important;
+    height: calc(100% - 62px) !important;
   }
 
   .panel-sidebar {
     width: 100% !important;
-    min-width: unset !important;
     height: auto !important;
     flex-direction: row !important;
     overflow-x: auto !important;
     overflow-y: hidden !important;
     border-right: none !important;
-    border-bottom: 1px solid var(--border-subtle) !important;
+    border-left: none !important;
+    border-bottom: 1px solid var(--border-subtle, rgba(39,28,22,0.08)) !important;
     padding: 8px 12px !important;
-    gap: 4px !important;
+    gap: 6px !important;
   }
 
   .panel-tab-btn {
@@ -2379,9 +2248,32 @@ html[data-theme="dark"] .cake-card--custom {
   }
 
   .panel-content {
-    height: auto !important;
-    overflow-y: auto !important;
-    padding: 16px !important;
-    padding-bottom: 80px !important;
+    padding: 18px 16px 80px 16px !important;
+  }
+
+  .theme-panel-layout {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .cake-card__body {
+    padding: 8px 10px 10px !important;
+  }
+  .cake-card__title {
+    font-size: 0.9rem !important;
+    min-height: auto !important;
+  }
+  .cake-card__desc {
+    display: none !important;
+  }
+  .cake-card__footer .btn {
+    min-width: 54px !important;
+    padding: 4px 10px !important;
+    font-size: 0.78rem !important;
+  }
+  .price-wrap .price {
+    font-size: 0.94rem !important;
   }
 }
