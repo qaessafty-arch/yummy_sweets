@@ -5575,6 +5575,133 @@ html[dir="rtl"] .review-card p {
   flex-shrink: 0;
 }
 
+/* =========================================================
+   Hero Background Photo + Screen-Size Corrections
+   ========================================================= */
+
+/* Full-bleed real photo behind the hero content */
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+/* Warm cream scrim so text stays readable (light theme aware) */
+.hero-bg-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    linear-gradient(90deg, rgba(247, 241, 232, 0.96) 0%, rgba(247, 241, 232, 0.88) 38%, rgba(247, 241, 232, 0.55) 62%, rgba(247, 241, 232, 0.28) 100%);
+}
+
+[data-theme="dark"] .hero-bg-veil {
+  background:
+    linear-gradient(90deg, rgba(26, 20, 18, 0.97) 0%, rgba(26, 20, 18, 0.9) 38%, rgba(26, 20, 18, 0.6) 62%, rgba(26, 20, 18, 0.32) 100%);
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hide the old flat gradient glow now that a photo provides depth */
+.hero-glow {
+  display: none;
+}
+
+/* ---- Screen-size corrections ---- */
+
+/* Large desktops: cap hero width and photo card height */
+@media (min-width: 1400px) {
+  .hero .container {
+    max-width: 1240px;
+  }
+  .hero__card {
+    max-width: 480px;
+    margin-inline-start: auto;
+  }
+  .hero__title {
+    font-size: clamp(2.6rem, 4.4vw, 4.1rem) !important;
+  }
+}
+
+/* Desktop / large tablet: keep photo card from becoming a tower */
+@media (min-width: 961px) and (max-width: 1399px) {
+  .hero__card {
+    aspect-ratio: 4 / 3;
+    max-height: 520px;
+  }
+}
+
+/* Tablets: two-step grid (3 cols) instead of jumping straight to 1 */
+@media (min-width: 641px) and (max-width: 960px) {
+  .features-grid,
+  .info-cards-grid,
+  .steps-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .features-grid .feature-card,
+  .info-cards-grid .info-card,
+  .steps-grid .step-card {
+    padding: 18px 14px;
+  }
+  .feature-icon-tile,
+  .info-card__icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  .feature-icon-tile svg,
+  .info-card__icon svg {
+    width: 19px;
+    height: 19px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 760px) {
+  .features-grid,
+  .info-cards-grid,
+  .steps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Phones: hero stacks, photo card stays compact */
+@media (max-width: 960px) {
+  .hero-bg-veil {
+    background: linear-gradient(180deg, rgba(247, 241, 232, 0.94) 0%, rgba(247, 241, 232, 0.9) 45%, rgba(247, 241, 232, 0.72) 100%);
+  }
+  [data-theme="dark"] .hero-bg-veil {
+    background: linear-gradient(180deg, rgba(26, 20, 18, 0.95) 0%, rgba(26, 20, 18, 0.92) 45%, rgba(26, 20, 18, 0.75) 100%);
+  }
+  .hero__card {
+    max-width: 420px;
+    margin-inline: auto;
+    aspect-ratio: 4 / 3;
+  }
+  .hero__title {
+    font-size: clamp(2rem, 8.4vw, 3rem) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero__card {
+    max-width: 340px;
+  }
+  .hero__title {
+    font-size: clamp(1.75rem, 8.8vw, 2.4rem) !important;
+  }
+  .hero__ctas .btn {
+    width: 100%;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -5660,6 +5787,8 @@ html[dir="rtl"] .review-card p {
   <main id="mainContent">
     <!-- Hero Section -->
     <section class="section hero" id="hero">
+      <img class="hero-bg-img" src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=1800&auto=format&fit=crop&q=80" alt="" aria-hidden="true" referrerpolicy="no-referrer" onerror="this.style.display='none';" />
+      <div class="hero-bg-veil" aria-hidden="true"></div>
       <div class="hero-glow" aria-hidden="true"></div>
       <div class="container hero__grid">
         <div class="hero__content">
@@ -5722,7 +5851,7 @@ html[dir="rtl"] .review-card p {
           </div>
 
           <div class="feature-card">
-            <div class="feature-icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg></div>
+            <div class="feature-icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></div>
             <h3 class="feature-card__title" data-i18n="feat3Title">Custom Creations</h3>
             <p data-i18n="feat3Desc">Bespoke tiers, customized chocolate writing, and tailored sweetness for every milestone.</p>
           </div>
@@ -9425,7 +9554,7 @@ const app = {
 
     const tabs = [
       { id: 'brand', label: 'Brand & Logo', icon: I('<circle cx="13.5" cy="6.5" r=".5" fill="currentColor" stroke="none"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor" stroke="none"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor" stroke="none"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor" stroke="none"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>'), devOnly: false },
-      { id: 'theme', label: this.t('tabTheme'), icon: I('<path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/>'), devOnly: false },
+      { id: 'theme', label: this.t('tabTheme'), icon: I('<rect x="3" y="3" width="18" height="18" rx="4"/><rect x="7" y="7" width="5" height="5" rx="1"/><rect x="12" y="12" width="5" height="5" rx="1"/>'), devOnly: false },
       { id: 'about', label: 'About Us', icon: I('<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>'), devOnly: false },
       { id: 'faq', label: 'FAQ', icon: I('<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>'), devOnly: false },
       { id: 'reviews', label: 'Reviews', icon: I('<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>'), devOnly: false },
@@ -10741,7 +10870,7 @@ const app = {
       <div class="logo-card">
         <div class="logo-card__header">
           <h5 class="logo-card__title">
-            <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/></svg></span> <span>${this.t('logoSection')}</span>
+            <span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><rect x="7" y="7" width="5" height="5" rx="1"/><rect x="12" y="12" width="5" height="5" rx="1"/></svg></span> <span>${this.t('logoSection')}</span>
           </h5>
           <span style="font-size:0.75rem;color:var(--muted);">${this.t('logoFaviconNote')}</span>
         </div>
