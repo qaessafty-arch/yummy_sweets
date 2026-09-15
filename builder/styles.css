@@ -3863,7 +3863,9 @@ html[dir="rtl"] .customer-drawer.is-open {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(247, 241, 232, 0.85); /* var(--cream) with opacity */
+  background: var(--cream);
+  -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to right, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 100%);
   z-index: 1;
 }
 
