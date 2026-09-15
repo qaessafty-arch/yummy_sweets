@@ -1119,11 +1119,24 @@ body.cur-iqd .price {
 }
 
 .cta-panel .section__title {
-  color: #FFFFFF;
+  color: #FFFFFF !important;
 }
 
 .cta-panel p {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* Ghost button inside the berry CTA panel must stay light-on-dark */
+.cta-panel .btn--ghost {
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.cta-panel .btn--ghost:hover {
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: #FFFFFF !important;
 }
 
 .cta-panel__actions {
@@ -1801,7 +1814,7 @@ body.single-currency #mobileCurrencySwitcher {
 }
 
 .footer__brand-col p {
-  color: rgba(255, 251, 247, 0.75);
+  color: rgba(255, 251, 247, 0.88);
   font-size: 0.92rem;
   max-width: 320px;
 }
@@ -1844,7 +1857,7 @@ body.single-currency #mobileCurrencySwitcher {
 }
 
 .footer__links a {
-  color: rgba(255, 251, 247, 0.75);
+  color: rgba(255, 251, 247, 0.88);
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s ease;
@@ -5028,7 +5041,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700 !important;
   letter-spacing: var(--ls-ultra) !important;
   text-transform: uppercase !important;
-  color: rgba(250, 240, 230, 0.45) !important;
+  color: rgba(250, 240, 230, 0.9) !important;
 }
 
 /* Social icons — gold hover */
@@ -5787,7 +5800,7 @@ html[dir="rtl"] .review-card p {
   <main id="mainContent">
     <!-- Hero Section -->
     <section class="section hero" id="hero">
-      <img class="hero-bg-img" src="https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=1800&auto=format&fit=crop&q=80" alt="" aria-hidden="true" referrerpolicy="no-referrer" onerror="this.style.display='none';" />
+      <img class="hero-bg-img" src="https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=1800&auto=format&fit=crop&q=80" alt="" aria-hidden="true" referrerpolicy="no-referrer" onerror="this.style.display='none';" />
       <div class="hero-bg-veil" aria-hidden="true"></div>
       <div class="hero-glow" aria-hidden="true"></div>
       <div class="container hero__grid">
