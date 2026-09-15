@@ -6105,6 +6105,147 @@ html[dir="rtl"] .hero__title {
   line-height: 1.25 !important;
 }
 
+/* =========================================================
+   SURFACE PRO & 3:2 HIGH-DPI DISPLAY OPTIMIZATION
+   Tailored for 1368x912 / 1440x960 & Touch 2-in-1 Devices
+   ========================================================= */
+
+/* 1. Viewport Fit for 1368x912 Surface Pro displays */
+@media (min-width: 1100px) and (max-height: 960px) {
+  .hero {
+    padding-top: calc(var(--header-height) + 20px) !important;
+    padding-bottom: 36px !important;
+    min-height: calc(100vh - var(--header-height) - 40px) !important;
+    max-height: 840px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .hero__grid {
+    grid-template-columns: 1.12fr 0.88fr !important;
+    gap: clamp(24px, 4vw, 48px) !important;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  .hero__title {
+    font-size: clamp(2.2rem, 3.6vw, 3.3rem) !important;
+    line-height: 1.12 !important;
+    max-width: 580px !important;
+  }
+
+  .lead {
+    font-size: 1rem !important;
+    line-height: 1.6 !important;
+    margin-top: 12px !important;
+    max-width: 500px !important;
+  }
+
+  .hero__ctas {
+    margin-top: 18px !important;
+    gap: 12px !important;
+  }
+
+  .hero__trust {
+    margin-top: 16px !important;
+    padding-top: 14px !important;
+    gap: 16px !important;
+  }
+
+  .hero__card {
+    max-height: 400px !important;
+    aspect-ratio: 4 / 3.4 !important;
+    padding: 24px !important;
+    border-radius: 20px !important;
+  }
+
+  .hero__cake-emoji {
+    font-size: 4.5rem !important;
+  }
+
+  .hero__float-review {
+    bottom: 12px !important;
+    right: 12px !important;
+    max-width: 240px !important;
+    padding: 10px 14px !important;
+    box-shadow: 0 8px 24px rgba(39, 28, 22, 0.12) !important;
+  }
+
+  .section {
+    padding-block: clamp(48px, 6vw, 76px) !important;
+  }
+}
+
+/* 2. Surface Pro Split-Screen / Snap Assist (Width 600px - 850px) */
+@media (min-width: 600px) and (max-width: 850px) {
+  .hero__grid {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+    gap: 28px !important;
+  }
+
+  .hero__content {
+    align-items: center !important;
+    max-width: 560px !important;
+    margin-inline: auto !important;
+  }
+
+  .hero__title {
+    font-size: clamp(2rem, 5.5vw, 2.75rem) !important;
+    max-width: 100% !important;
+  }
+
+  .hero .lead {
+    max-width: 480px !important;
+  }
+
+  .hero__ctas, .hero__trust {
+    justify-content: center !important;
+  }
+
+  .hero__card {
+    max-width: 380px !important;
+    margin-inline: auto !important;
+    aspect-ratio: 4 / 3.2 !important;
+  }
+
+  .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 14px !important;
+  }
+
+  .features-grid,
+  .steps-grid,
+  .info-cards-grid,
+  .reviews__grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .footer__grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+  }
+}
+
+/* 3. Surface Touchscreen & Stylus Precision */
+@media (pointer: coarse) {
+  .btn, .filter-pill, .switch-btn, .panel-tab-btn, .modal-close {
+    min-height: 40px !important;
+    touch-action: manipulation !important;
+  }
+
+  .nav__link {
+    padding: 10px 14px !important;
+  }
+
+  .desktop-category-pills,
+  .panel-sidebar {
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior-x: contain !important;
+  }
+}
+
   </style>
 </head>
 <body>
