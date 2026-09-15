@@ -695,6 +695,9 @@ const TRANSLATIONS = {
     usersCannotDeleteSelf: 'You cannot delete your own account.',
     usersCannotDeleteElevated: 'Only the developer can delete admin or developer accounts.',
     usersConfirmDelete: 'Delete user "{name}"? This cannot be undone.',
+    phonePreviewLabel: 'Preview width',
+    phonePreviewDesktop: 'Desktop',
+    phonePreviewPhone: 'Phone',
     backupImported: 'Backup imported successfully!',
     copiedJson: 'Copied JSON to clipboard!',
     factoryResetDone: 'Reset to factory defaults complete.',
@@ -1046,6 +1049,9 @@ fontPreview: 'Preview',
     usersCannotDeleteSelf: 'ناتوانیت ئەژمێری خۆت بسڕیتەوە.',
     usersCannotDeleteElevated: 'تەنها گەشەپێدەر دەتوانێت ئەژمێری ئەدمین و گەشەپێدەر بسڕێتەوە.',
     usersConfirmDelete: 'دڵنیایی لە سڕینەوەی "{name}"؟ ئەمە ناگەڕێتەوە.',
+    phonePreviewLabel: 'پانی پیشاندان',
+    phonePreviewDesktop: 'کۆمپیوتەر',
+    phonePreviewPhone: 'مۆبایل',
     backupImported: 'باکئەپ بە سەرکەوتوویی هێنرایە ناوەوە!',
     copiedJson: 'JSON کۆپی کرا بۆ کلیپبۆرد!',
     factoryResetDone: 'گەڕانەوە بۆ باری بنەڕەتی بە سەرکەوتوویی تەواو بوو.',
@@ -3391,12 +3397,14 @@ const app = {
               </div>
             </div>
 
-            <div style="margin-top:24px;padding:24px;background:var(--shell);border-radius:16px;border:1px solid var(--line);direction:rtl;text-align:right;">
+            <div id="fontPreviewMount">
+            <div id="fontPreviewFrame" class="font-preview-frame" style="margin-top:24px;padding:24px;background:var(--shell);border-radius:16px;border:1px solid var(--line);direction:rtl;text-align:right;">
               <div style="font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">${this.t('fontPreview')}</div>
               <h4 id="fontPreviewHeading" style="font-size:1.6rem;margin-bottom:10px;font-family:'${kuDisp}',serif;">کێکی تایبەت بۆ ئاهەنگەکەت</h4>
               <p id="fontPreviewBody" style="font-size:.95rem;color:var(--muted);line-height:1.9;font-family:'${kuBody}',sans-serif;">
                 کێک و کاپکێک و شیرینی بە بچووکی لە چێشتخانەکەی خۆمان بە دەست دروست دەکرێن — بە کەرەی ڕاستەقینە و ڤانیلای ڕاستەقینە.
               </p>
+            </div>
             </div>
 
             <div style="margin-top:20px;display:flex;align-items:center;gap:12px;">
@@ -3407,6 +3415,7 @@ const app = {
             </div>
           </form>
         `;
+        this.addPhonePreviewToggle(document.getElementById('fontPreviewMount'), { frameId: 'fontPreviewFrame', mountId: 'fontPreviewMount' });
         break;
       }
 
@@ -3751,7 +3760,8 @@ const app = {
         </div>
         <div>
           <h4 style="font-family:var(--font-serif);margin-bottom:16px;">${this.t('themePreviewTitle')}</h4>
-          <div class="theme-preview-card" style="margin-bottom:16px;">
+          <div id="themePreviewMount">
+          <div id="themePreviewCard" class="theme-preview-card" style="margin-bottom:16px;">
             <h3>${this.t('themePreviewHeading')}</h3>
             <p>${this.t('themePreviewBody')}</p>
             <div class="theme-preview-buttons">
@@ -3761,9 +3771,11 @@ const app = {
             <div class="theme-preview-gold">${this.t('themePreviewGold')}</div>
             <div class="theme-preview-price">${this.t('themePreviewPrice')}</div>
           </div>
+          </div>
         </div>
       </div>
     `;
+    this.addPhonePreviewToggle(document.getElementById('themePreviewMount'), { frameId: 'themePreviewCard', mountId: 'themePreviewMount' });
   },
 
   previewTheme(presetId) {
@@ -4028,6 +4040,49 @@ const app = {
     const content = document.getElementById('panelContent');
     if (content && this.activePanelTab === 'users') this.renderUsersTab(content);
     this.showToast(this.t('toastDeleted'), 'success');
+  },
+
+  // ─── Phone Preview (Theme & Fonts tabs) ────────────────────────────────
+  // Injects a Desktop/Phone toggle bar before an element and, when Phone is
+  // active, wraps that element in a fixed 390px device frame.
+  addPhonePreviewToggle(anchorEl, frameHtml) {
+    if (!anchorEl) return;
+    const bar = document.createElement('div');
+    bar.className = 'phone-preview-bar';
+    bar.setAttribute('role', 'group');
+    bar.setAttribute('aria-label', this.t('phonePreviewLabel'));
+    bar.innerHTML = `
+      <button type="button" class="phone-preview-btn is-active" data-phone-mode="desktop">🖥 ${this.t('phonePreviewDesktop')}</button>
+      <button type="button" class="phone-preview-btn" data-phone-mode="phone">📱 ${this.t('phonePreviewPhone')}</button>
+    `;
+    anchorEl.parentNode.insertBefore(bar, anchorEl);
+
+    bar.addEventListener('click', (e) => {
+      const btn = e.target.closest('.phone-preview-btn');
+      if (!btn) return;
+      this.setPhonePreviewMode(bar, btn.dataset.phoneMode, frameHtml);
+    });
+  },
+
+  setPhonePreviewMode(bar, mode, frameHtml) {
+    if (!bar) return;
+    bar.querySelectorAll('.phone-preview-btn').forEach(b => b.classList.toggle('is-active', b.dataset.phoneMode === mode));
+    const target = document.getElementById(frameHtml.frameId);
+    const mount = document.getElementById(frameHtml.mountId);
+    if (!target || !mount) return;
+
+    if (mode === 'phone') {
+      if (!target.classList.contains('phone-frame')) {
+        const notch = document.createElement('div');
+        notch.className = 'phone-frame__notch';
+        mount.insertBefore(notch, target);
+        target.classList.add('phone-frame');
+      }
+    } else {
+      const notch = mount.querySelector(':scope > .phone-frame__notch');
+      if (notch) notch.remove();
+      target.classList.remove('phone-frame');
+    }
   },
 
   renderCustomersTab(content) {

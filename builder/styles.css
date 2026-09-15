@@ -3634,6 +3634,7 @@ header#mainHeader:nth-of-type(1) > div:nth-of-type(1) {
   max-width: 100%;
   width: 100%;
   box-sizing: border-box;
+}
 
 /* =========================================================
    ARTISANAL BAKERY — ELEGANT DESIGN SYSTEM
@@ -5335,4 +5336,103 @@ html[dir="rtl"] .review-card p {
   font-size: 0.75rem;
   color: var(--muted);
   margin-left: 6px;
+}
+
+/* =========================================================
+   Phone Preview Toggle (Theme & Fonts tabs)
+   ========================================================= */
+
+.phone-preview-bar {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--shell);
+  border: 1px solid var(--line);
+  padding: 3px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 14px;
+}
+
+.phone-preview-btn {
+  background: transparent;
+  border: none;
+  padding: 5px 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.phone-preview-btn.is-active {
+  background-color: #FFFFFF;
+  color: var(--berry-deep);
+  box-shadow: 0 1px 3px rgba(59, 42, 38, 0.08);
+}
+
+/* Phone frame: fixed device width so admins can see phone typography
+   regardless of how wide the panel modal itself is. */
+.phone-frame {
+  width: 390px;
+  max-width: 100%;
+  margin-inline: auto;
+  border: 1px solid var(--line-strong);
+  border-radius: 28px;
+  padding: 12px;
+  background: var(--cream);
+  box-shadow: var(--shadow-l2), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  transition: max-width 0.25s ease;
+}
+
+.phone-frame__notch {
+  width: 96px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--line-strong);
+  margin: 0 auto 10px auto;
+}
+
+/* Scoping: inside the frame, preview content behaves like it would on a
+   390px-wide phone (font sizes from the design system, fluid headings). */
+.phone-frame .theme-preview-card {
+  padding: 18px;
+  gap: 12px;
+}
+
+.phone-frame .theme-preview-card h3 {
+  font-size: clamp(1.25rem, 6vw, 1.6rem);
+  line-height: 1.2;
+}
+
+.phone-frame .theme-preview-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.phone-frame .theme-preview-buttons {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.phone-frame .theme-preview-buttons .btn {
+  justify-content: center;
+}
+
+.phone-frame .font-preview-frame {
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.phone-frame .font-preview-frame h4 {
+  font-size: clamp(1.3rem, 6.5vw, 1.6rem);
+  line-height: 1.35;
+}
+
+.phone-frame .font-preview-frame p {
+  font-size: 0.92rem;
+  line-height: 1.9;
 }
