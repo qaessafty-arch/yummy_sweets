@@ -534,6 +534,11 @@ const DEFAULT_PRODUCTS = [
 // Complete Bilingual Dictionary (English & Kurdish Sorani)
 const TRANSLATIONS = {
   en: {
+    btnCancel: "Cancel",
+    btnSubmit: "Submit",
+    btnSaveConfig: "Save Settings",
+    economyTitle: "Pricing & Economy",
+    economyDesc: "Manage currency conversion, delivery fees, and minimum order rules.",
     shopTagline: 'Artisanal Boutique Bakery',
     announcementText: 'Pre-order for weekend celebrations! <strong>Free local delivery</strong> on orders over $50.',
     navMenu: 'Menu',
@@ -888,6 +893,16 @@ fontPreview: 'Preview',
     themeAutoDark:'Enable auto-dark mode (system)'
   },
   ku: {
+    btnCancel: "پاشگەزبوونەوە",
+    btnSubmit: "ناردن",
+    btnSaveConfig: "پاشەکەوتکردنی ڕێکخستنەکان",
+    economyTitle: "نرخدانان و ئابووری",
+    economyDesc: "بەڕێوەبردنی نرخی ئاڵوگۆڕ، کرێی گەیاندن و مەرجەکانی کەمترین داواکاری.",
+    btnCancel: "پاشگەزبوونەوە",
+    btnSubmit: "ناردن",
+    btnSaveConfig: "پاشەکەوتکردنی ڕێکخستنەکان",
+    economyTitle: "نرخدانان و ئابووری",
+    economyDesc: "بەڕێوەبردنی نرخی ئاڵوگۆڕ، کرێی گەیاندن و مەرجەکانی کەمترین داواکاری.",
     shopTagline: 'شیرینەمەنی دەستکردی نایاب',
     announcementText: 'پێشوەختە داوا بکە بۆ ئاهەنگەکانی کۆتایی هەفتە! <strong>گەیاندنی خۆڕایی</strong> بۆ داواکاری سەروو $50.',
     navMenu: 'لیستی شیرینی',

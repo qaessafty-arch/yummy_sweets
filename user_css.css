@@ -2277,3 +2277,143 @@ html[dir="rtl"] .review-card p {
     font-size: 0.94rem !important;
   }
 }
+
+/* =========================================================
+   HERO PHOTO BACKGROUND & TEXT CONTRAST UX
+   ========================================================= */
+
+.hero {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.hero-bg-img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+.hero-bg-veil {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  background: linear-gradient(
+    90deg,
+    rgba(247, 241, 232, 0.96) 0%,
+    rgba(247, 241, 232, 0.90) 42%,
+    rgba(247, 241, 232, 0.60) 65%,
+    rgba(247, 241, 232, 0.30) 100%
+  ) !important;
+  pointer-events: none !important;
+}
+
+[data-theme="dark"] .hero-bg-veil {
+  background: linear-gradient(
+    90deg,
+    rgba(26, 20, 18, 0.97) 0%,
+    rgba(26, 20, 18, 0.92) 42%,
+    rgba(26, 20, 18, 0.65) 65%,
+    rgba(26, 20, 18, 0.35) 100%
+  ) !important;
+}
+
+html[dir="rtl"] .hero-bg-veil {
+  background: linear-gradient(
+    270deg,
+    rgba(247, 241, 232, 0.96) 0%,
+    rgba(247, 241, 232, 0.90) 42%,
+    rgba(247, 241, 232, 0.60) 65%,
+    rgba(247, 241, 232, 0.30) 100%
+  ) !important;
+}
+
+html[dir="rtl"][data-theme="dark"] .hero-bg-veil {
+  background: linear-gradient(
+    270deg,
+    rgba(26, 20, 18, 0.97) 0%,
+    rgba(26, 20, 18, 0.92) 42%,
+    rgba(26, 20, 18, 0.65) 65%,
+    rgba(26, 20, 18, 0.35) 100%
+  ) !important;
+}
+
+.hero .container {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.hero-glow {
+  display: none !important;
+}
+
+@media (max-width: 960px) {
+  .hero-bg-veil,
+  html[dir="rtl"] .hero-bg-veil {
+    background: linear-gradient(
+      180deg,
+      rgba(247, 241, 232, 0.96) 0%,
+      rgba(247, 241, 232, 0.92) 45%,
+      rgba(247, 241, 232, 0.75) 100%
+    ) !important;
+  }
+  [data-theme="dark"] .hero-bg-veil,
+  html[dir="rtl"][data-theme="dark"] .hero-bg-veil {
+    background: linear-gradient(
+      180deg,
+      rgba(26, 20, 18, 0.97) 0%,
+      rgba(26, 20, 18, 0.93) 45%,
+      rgba(26, 20, 18, 0.78) 100%
+    ) !important;
+  }
+}
+
+/* Berry CTA Panel Text & Button Contrast */
+.cta-panel .section__title {
+  color: #FFFFFF !important;
+}
+.cta-panel p {
+  color: rgba(255, 255, 255, 0.94) !important;
+}
+.cta-panel .btn--ghost {
+  color: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+.cta-panel .btn--ghost:hover {
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-color: #FFFFFF !important;
+}
+
+/* Footer Contrast & Hierarchy */
+.site-footer h4,
+.footer__col h4,
+.footer__brand-col h4 {
+  color: rgba(250, 240, 230, 0.95) !important;
+}
+.footer__brand-col p,
+.footer__links a {
+  color: rgba(255, 251, 247, 0.88) !important;
+}
+.footer__links a:hover {
+  color: var(--accent, #BF9735) !important;
+}
+
+/* Kurdish & Arabic Script Typography Optimization */
+html[dir="rtl"] body {
+  line-height: 1.8 !important;
+}
+html[dir="rtl"] .nav__link,
+html[dir="rtl"] .btn,
+html[dir="rtl"] .filter-pill,
+html[dir="rtl"] .cake__tag {
+  line-height: 1.4 !important;
+}
+html[dir="rtl"] .hero__title {
+  line-height: 1.25 !important;
+}
