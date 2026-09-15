@@ -27,7 +27,11 @@ const FONT_OPTIONS = [
   { value: 'IBM Plex Sans Arabic', label: 'IBM Plex Sans Arabic (corporate)' },
   { value: 'Noto Naskh Arabic', label: 'Noto Naskh Arabic (calligraphic)' },
   { value: 'Noto Kufi Arabic', label: 'Noto Kufi Arabic (geometric)' },
-  { value: 'Noto Sans Arabic', label: 'Noto Sans Arabic (neutral)' }
+  { value: 'Noto Sans Arabic', label: 'Noto Sans Arabic (neutral)' },
+  { value: 'Amiri', label: 'Amiri (calligraphic, premium)' },
+  { value: 'Tajawal', label: 'Tajawal (modern, legible)' },
+  { value: 'Almarai', label: 'Almarai (clean, contemporary)' },
+  { value: 'Rubik', label: 'Rubik (multilingual, rounded)' }
 ];
 
 // Economy Configuration Defaults
@@ -2478,9 +2482,9 @@ const app = {
 
     let msg = '';
     if (isKu) {
-      msg = `سڵاو لە ${shopName}! دەمەوێت ئەم داواکارییە تۆمار بکەم:\n\n${items.join('\n')}\n\n${breakdownLines.join('\n')}\n\nناوی کڕیار: ${customerName}\nبەروار و کاتی گەیاندن: \nناونیشانی تەواو: `;
+      msg = `سڵاو لە ${shopName}! دەمەوێت ئەم داواکارییە تۆمار بکەم:\n\n${items.join('\n')}\n\n${breakdownLines.join('\n')}\n\nناوی کڕیار: ${customerName}\nبەروار و کاتی گەیاندن: ${fulfillmentDate}\nناونیشانی تەواو: `;
     } else {
-      msg = `Hello ${shopName}! I'd like to place an order:\n\n${items.join('\n')}\n\n${breakdownLines.join('\n')}\n\nCustomer Name: ${customerName}\nPreferred Delivery Date/Time: \nDelivery Address: `;
+      msg = `Hello ${shopName}! I'd like to place an order:\n\n${items.join('\n')}\n\n${breakdownLines.join('\n')}\n\nCustomer Name: ${customerName}\nPreferred Delivery Date/Time: ${fulfillmentDate}\nDelivery Address: `;
     }
 
     if (this.orderNote) {
@@ -2924,7 +2928,7 @@ const app = {
 
   // Control Panel CMS Modal
   openPanelModal() {
-    if (!this.session || (this.session.user.role !== 'admin' && this.session.user.role !== 'dev')) {
+    if (!this.session || !['admin', 'dev', 'staff'].includes(this.session.user.role)) {
       this.openAuthModal();
       return;
     }
@@ -4602,9 +4606,13 @@ const app = {
     if (isKu) {
       document.documentElement.style.setProperty('--font-body', `'${body}', system-ui, sans-serif`);
       document.documentElement.style.setProperty('--font-heading', `'${disp}', serif`);
+      document.documentElement.style.setProperty('--font-ui', `'${body}', system-ui, sans-serif`);
+      document.documentElement.style.setProperty('--font-accent', `'${disp}', serif`);
     } else {
-      document.documentElement.style.setProperty('--font-body', `'Noto Sans Arabic', system-ui, sans-serif`);
-      document.documentElement.style.setProperty('--font-heading', `'Cormorant Garamond', serif`);
+      document.documentElement.style.setProperty('--font-body', `'DM Sans', system-ui, sans-serif`);
+      document.documentElement.style.setProperty('--font-heading', `'DM Serif Display', serif`);
+      document.documentElement.style.setProperty('--font-ui', `'Outfit', system-ui, sans-serif`);
+      document.documentElement.style.setProperty('--font-accent', `'Lora', serif`);
     }
   },
 
