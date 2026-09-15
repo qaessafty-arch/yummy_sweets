@@ -4,6 +4,49 @@
  * Single-file Vanilla ES6+ Engine
  */
 
+import { initializeApp } from "firebase/app";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut as firebaseSignOut } from "firebase/auth";
+import { getFirestore, doc, getDoc, setDoc, getDocFromServer, collection, getDocs, onSnapshot, query, where, writeBatch } from "firebase/firestore";
+import firebaseConfig from "./firebase-applet-config.json";
+
+let db, auth;
+const OperationType = { CREATE: 'create', UPDATE: 'update', DELETE: 'delete', LIST: 'list', GET: 'get', WRITE: 'write' };
+
+function handleFirestoreError(error, operationType, path) {
+  const errInfo = {
+    error: error instanceof Error ? error.message : String(error),
+    authInfo: {
+      userId: auth?.currentUser?.uid,
+      email: auth?.currentUser?.email,
+      emailVerified: auth?.currentUser?.emailVerified,
+      isAnonymous: auth?.currentUser?.isAnonymous
+    },
+    operationType,
+    path
+  };
+  console.error('Firestore Error: ', JSON.stringify(errInfo));
+  throw new Error(JSON.stringify(errInfo));
+}
+
+try {
+  const firebaseApp = initializeApp(firebaseConfig);
+  db = getFirestore(firebaseApp, firebaseConfig.firestoreDatabaseId);
+  auth = getAuth(firebaseApp);
+  
+  // Test connection asynchronously
+  (async () => {
+    try {
+      await getDocFromServer(doc(db, 'test', 'connection'));
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('the client is offline')) {
+        console.error("Please check your Firebase configuration.");
+      }
+    }
+  })();
+} catch (e) {
+  console.error("Firebase init failed", e);
+}
+
 // Top-of-script default constants
 const WHATSAPP_NUMBER = '15551234567';
 const SHOP_NAME       = 'Yummy Sweets';
@@ -32,6 +75,17 @@ const FONT_OPTIONS = [
   { value: 'Tajawal', label: 'Tajawal (modern, legible)' },
   { value: 'Almarai', label: 'Almarai (clean, contemporary)' },
   { value: 'Rubik', label: 'Rubik (multilingual, rounded)' }
+];
+
+// English & Latin Font Options
+const FONT_OPTIONS_EN = [
+  { value: 'DM Sans', label: 'DM Sans (geometric, clean modern)' },
+  { value: 'Cormorant Garamond', label: 'Cormorant Garamond (artisanal luxury serif)' },
+  { value: 'Playfair Display', label: 'Playfair Display (editorial serif)' },
+  { value: 'DM Serif Display', label: 'DM Serif Display (warm display serif)' },
+  { value: 'Lora', label: 'Lora (classic contemporary)' },
+  { value: 'Inter', label: 'Inter (clean neutral)' },
+  { value: 'Outfit', label: 'Outfit (boutique sans)' }
 ];
 
 // Economy Configuration Defaults
@@ -104,14 +158,16 @@ const THEMES = {
     }
   },
   midnight: {
-    label:{ en:'Midnight', ku:'نیوەشەو' },
+    label:{ en:'Midnight Noir', ku:'نیوەشەو' },
+    isDark: true,
     tokens:{
-      cream:'#FDFBF6', shell:'#F5EEE0', blush:'#E8DCC4', linen:'#FAF5EA',
-      berry:'#1F2E4A', berryDark:'#152238', berryDeep:'#0C1526',
-      cocoa:'#2A2419', cocoaSoft:'#4A4030',
-      gold:'#C9A227', goldSoft:'#E8C766',
-      ink:'#1A160E', muted:'#6E6450',
-      line:'#E8DCC0', lineStrong:'#D6C5A4'
+      cream:'#15110E', shell:'#1E1814', blush:'#342820', linen:'#221B16',
+      surface:'#241D18', surfaceHover:'#2D241E', surfaceInput:'#1B1512',
+      berry:'#E07A5F', berryDark:'#C66247', berryDeep:'#F4A58E',
+      cocoa:'#F7EFE8', cocoaSoft:'#D6C6B8',
+      gold:'#E5B85C', goldSoft:'#F3D48E',
+      ink:'#EDE3DA', muted:'#A89687',
+      line:'#3A2E26', lineStrong:'#4F3F34'
     }
   }
 };
@@ -119,8 +175,10 @@ const THEMES = {
 // Seed Configuration
 const DEFAULT_CONFIG = {
   shopName: { en: 'Yummy Sweets', ku: 'یامی سویتس' },
-  theme: { presetId: 'berry', tokens: THEMES.berry.tokens },
+  theme: { presetId: 'berry', tokens: THEMES.berry.tokens, mode: 'light', autoDark: false },
   tagline: { en: 'Artisanal Boutique Bakery', ku: 'شیرینەمەنی دەستکردی نایاب' },
+  englishBodyFont: 'DM Sans',
+  englishDisplayFont: 'Cormorant Garamond',
   kurdishBodyFont: 'Vazirmatn',
   kurdishDisplayFont: 'Vazirmatn',
   logoMode: 'emoji',
@@ -724,6 +782,8 @@ const TRANSLATIONS = {
     tabFonts: 'Fonts',
     fieldKurdishBody: 'Kurdish body font',
     fieldKurdishDisplay: 'Kurdish heading font',
+    fieldEnglishBody: 'English body font',
+    fieldEnglishDisplay: 'English heading font',
     saveFonts: 'Save fonts',
 fontPreview: 'Preview',
     customizeTitle: 'Customize',
@@ -1088,6 +1148,8 @@ fontPreview: 'Preview',
     tabFonts: 'فۆنتەکان',
     fieldKurdishBody: 'فۆنتی ناوەوە (کوردی)',
     fieldKurdishDisplay: 'فۆنتی سەرنوسراو (کوردی)',
+    fieldEnglishBody: 'فۆنتی ناوەوە (ئینگلیزی)',
+    fieldEnglishDisplay: 'فۆنتی سەرنوسراو (ئینگلیزی)',
     saveFonts: 'پاشەکەوتکردنی فۆنت',
 fontPreview: 'پێشبینین',
     customizeTitle: 'دەستکاری کردن',
@@ -1295,6 +1357,7 @@ const app = {
   
   init() {
     this.loadState();
+    this.initFirebaseSync();
     this.parseUrlHash();
     this.applyTheme(this.config.theme.tokens);
     this.applyFonts();
@@ -1303,6 +1366,83 @@ const app = {
     this.updateFavicon();
     this.bindEvents();
     this.setupIntersectionObserver();
+  },
+
+  initFirebaseSync() {
+    if (!db) return;
+    
+    // Config
+    onSnapshot(doc(db, 'config', 'main'), (docSnap) => {
+      if (docSnap.exists()) {
+        const remoteConfig = docSnap.data();
+        if (JSON.stringify(this.config) !== JSON.stringify(remoteConfig)) {
+          this.config = remoteConfig;
+          localStorage.setItem(KEYS.CONFIG, JSON.stringify(this.config));
+          this.applyTheme(this.config.theme.tokens);
+          this.applyFonts();
+          this.renderAll();
+        }
+      }
+    }, (e) => handleFirestoreError(e, OperationType.GET, 'config/main'));
+
+    // Products
+    onSnapshot(collection(db, 'products'), (snap) => {
+      if (!snap.empty) {
+        this.products = snap.docs.map(d => d.data());
+        localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(this.products));
+        this.renderAll();
+      }
+    }, (e) => handleFirestoreError(e, OperationType.GET, 'products'));
+
+    let usersUnsub, ordersUnsub;
+    
+    if (auth) {
+      onAuthStateChanged(auth, (user) => {
+        if (usersUnsub) { usersUnsub(); usersUnsub = null; }
+        if (ordersUnsub) { ordersUnsub(); ordersUnsub = null; }
+        
+        if (user) {
+          const isAdmin = user.email === 'Qaessafty@gmail.com' || ['admin', 'dev'].includes(this.session?.user?.role);
+          
+          if (isAdmin) {
+            usersUnsub = onSnapshot(collection(db, 'users'), (snap) => {
+              if (!snap.empty) {
+                this.users = snap.docs.map(d => d.data());
+                localStorage.setItem(KEYS.USERS, JSON.stringify(this.users));
+                this.renderAll();
+              }
+            }, (e) => handleFirestoreError(e, OperationType.GET, 'users'));
+
+            ordersUnsub = onSnapshot(collection(db, 'orders'), (snap) => {
+              if (!snap.empty) {
+                this.orders = snap.docs.map(d => d.data());
+                localStorage.setItem(KEYS.ORDERS, JSON.stringify(this.orders));
+                this.renderAll();
+              }
+            }, (e) => handleFirestoreError(e, OperationType.GET, 'orders'));
+          } else {
+            usersUnsub = onSnapshot(doc(db, 'users', user.uid), (docSnap) => {
+              if (docSnap.exists()) {
+                const uData = docSnap.data();
+                const idx = this.users.findIndex(u => u.id === user.uid);
+                if (idx > -1) this.users[idx] = uData;
+                else this.users.push(uData);
+                localStorage.setItem(KEYS.USERS, JSON.stringify(this.users));
+                this.renderAll();
+              }
+            }, (e) => handleFirestoreError(e, OperationType.GET, 'users'));
+
+            ordersUnsub = onSnapshot(query(collection(db, 'orders'), where('customerId', '==', user.uid)), (snap) => {
+              if (!snap.empty) {
+                this.orders = snap.docs.map(d => d.data());
+                localStorage.setItem(KEYS.ORDERS, JSON.stringify(this.orders));
+                this.renderAll();
+              }
+            }, (e) => handleFirestoreError(e, OperationType.GET, 'orders'));
+          }
+        }
+      });
+    }
   },
 
   // State & LocalStorage Helpers
@@ -1442,12 +1582,23 @@ const app = {
 
   saveConfig() {
     localStorage.setItem(KEYS.CONFIG, JSON.stringify(this.config));
+    if (db) setDoc(doc(db, 'config', 'main'), this.config).catch(e => handleFirestoreError(e, OperationType.WRITE, 'config/main'));
   },
   saveUsers() {
     localStorage.setItem(KEYS.USERS, JSON.stringify(this.users));
+    if (db) {
+      const batch = writeBatch(db);
+      this.users.forEach(u => batch.set(doc(db, 'users', u.id), u));
+      batch.commit().catch(e => handleFirestoreError(e, OperationType.WRITE, 'users'));
+    }
   },
   saveOrders() {
     localStorage.setItem(KEYS.ORDERS, JSON.stringify(this.orders));
+    if (db) {
+      const batch = writeBatch(db);
+      this.orders.forEach(o => batch.set(doc(db, 'orders', o.id), o));
+      batch.commit().catch(e => handleFirestoreError(e, OperationType.WRITE, 'orders'));
+    }
   },
   saveCustomerNotes() {
     localStorage.setItem(KEYS.CUSTOMER_NOTES, JSON.stringify(this.customerNotes));
@@ -1455,6 +1606,11 @@ const app = {
   saveProducts() {
     try {
       localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(this.products));
+      if (db) {
+        const batch = writeBatch(db);
+        this.products.forEach(p => batch.set(doc(db, 'products', p.id), p));
+        batch.commit().catch(e => handleFirestoreError(e, OperationType.WRITE, 'products'));
+      }
       return true;
     } catch (e) {
       console.error('Storage quota error:', e);
@@ -2973,8 +3129,39 @@ const app = {
     }
   },
 
-  handleCustomerSubmit(e) {
+  async handleCustomerSubmit(e) {
     e.preventDefault();
+    if (auth) {
+      try {
+        const result = await signInWithPopup(auth, new GoogleAuthProvider());
+        const user = result.user;
+        let existing = this.users.find(u => u.id === user.uid);
+        if (!existing) {
+          existing = {
+            id: user.uid,
+            name: user.displayName || user.email,
+            phone: document.getElementById('custMobile').value.trim() || user.phoneNumber || 'N/A',
+            role: 'customer'
+          };
+          this.users.push(existing);
+          this.saveUsers();
+        } else {
+          existing.name = user.displayName || user.email;
+          this.saveUsers();
+        }
+        
+        this.session = { user: existing };
+        this.saveSession();
+        this.updateAuthUI();
+        this.closeAuthModal();
+        this.showToast(this.t('signedInAs').replace('{name}', existing.name), 'success');
+      } catch (err) {
+        this.showToast(err.message, 'error');
+      }
+      return;
+    }
+    
+    // Fallback if no Firebase
     const phone = document.getElementById('custMobile').value.trim();
     const name = document.getElementById('custName').value.trim();
 
@@ -3006,12 +3193,34 @@ const app = {
     this.showToast(this.t('signedInAs').replace('{name}', name), 'success');
   },
 
-  handleStaffSubmit(e) {
+  async handleStaffSubmit(e) {
     e.preventDefault();
+    if (auth) {
+      try {
+        const result = await signInWithPopup(auth, new GoogleAuthProvider());
+        const user = result.user;
+        let staff = this.users.find(u => u.id === user.uid);
+        if (!staff) {
+           staff = { id: user.uid, name: user.displayName || user.email, role: 'admin' };
+           this.users.push(staff);
+           this.saveUsers();
+        }
+        this.session = { user: staff };
+        this.saveSession();
+        this.updateAuthUI();
+        this.renderWatermark();
+        this.closeAuthModal();
+        this.showToast('Logged in as ' + user.email, 'success');
+        setTimeout(() => this.openPanelModal(), 400);
+      } catch (err) {
+        this.showToast(err.message, 'error');
+      }
+      return;
+    }
+    
+    // Fallback if no Firebase
     const uname = document.getElementById('staffUsername').value.trim();
     const pass = document.getElementById('staffPassword').value.trim();
-
-    // Check credentials against users list
     const staff = this.users.find(u => 
       (u.username === uname || u.name === uname) && 
       u.password === pass && 
@@ -3036,7 +3245,8 @@ const app = {
     }, 400);
   },
 
-  logout() {
+  async logout() {
+    if (auth) await firebaseSignOut(auth).catch(console.error);
     this.session = null;
     this.saveSession();
     this.updateAuthUI();
@@ -3390,46 +3600,73 @@ const app = {
           content.innerHTML = `<p style="color:var(--muted);">${this.t('usersNoAccess')}</p>`;
           break;
         }
-        const fontOptions = (selected) => FONT_OPTIONS
+        const fontOptions = (options, selected) => options
           .map(f => `<option value="${f.value}" ${selected === f.value ? 'selected' : ''}>${f.label}</option>`)
           .join('');
 
         const kuBody = c.kurdishBodyFont || 'Vazirmatn';
         const kuDisp = c.kurdishDisplayFont || 'Vazirmatn';
+        const enBody = c.englishBodyFont || 'DM Sans';
+        const enDisp = c.englishDisplayFont || 'Cormorant Garamond';
 
         content.innerHTML = `
           <h4 style="font-family:var(--font-serif);margin-bottom:16px;">${this.t('tabFonts')}</h4>
           <form onsubmit="app.saveFontSettings(event)">
+            <div style="font-size:0.9rem;font-weight:600;color:var(--berry);margin-bottom:8px;">Kurdish / Arabic Typography (RTL)</div>
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="cfgKuBody">${this.t('fieldKurdishBody')}</label>
                 <select id="cfgKuBody" class="form-select" onchange="app.handleFontPreviewChange()">
-                  ${fontOptions(kuBody)}
+                  ${fontOptions(FONT_OPTIONS, kuBody)}
                 </select>
               </div>
               <div class="form-group">
                 <label class="form-label" for="cfgKuDisplay">${this.t('fieldKurdishDisplay')}</label>
                 <select id="cfgKuDisplay" class="form-select" onchange="app.handleFontPreviewChange()">
-                  ${fontOptions(kuDisp)}
+                  ${fontOptions(FONT_OPTIONS, kuDisp)}
+                </select>
+              </div>
+            </div>
+
+            <div style="font-size:0.9rem;font-weight:600;color:var(--berry);margin-top:16px;margin-bottom:8px;">English / Latin Typography (LTR)</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="cfgEnBody">${this.t('fieldEnglishBody')}</label>
+                <select id="cfgEnBody" class="form-select" onchange="app.handleFontPreviewChange()">
+                  ${fontOptions(FONT_OPTIONS_EN, enBody)}
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cfgEnDisplay">${this.t('fieldEnglishDisplay')}</label>
+                <select id="cfgEnDisplay" class="form-select" onchange="app.handleFontPreviewChange()">
+                  ${fontOptions(FONT_OPTIONS_EN, enDisp)}
                 </select>
               </div>
             </div>
 
             <div id="fontPreviewMount">
-            <div id="fontPreviewFrame" class="font-preview-frame" style="margin-top:24px;padding:24px;background:var(--shell);border-radius:16px;border:1px solid var(--line);direction:rtl;text-align:right;">
-              <div style="font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">${this.t('fontPreview')}</div>
-              <h4 id="fontPreviewHeading" style="font-size:1.6rem;margin-bottom:10px;font-family:'${kuDisp}',serif;">کێکی تایبەت بۆ ئاهەنگەکەت</h4>
-              <p id="fontPreviewBody" style="font-size:.95rem;color:var(--muted);line-height:1.9;font-family:'${kuBody}',sans-serif;">
-                کێک و کاپکێک و شیرینی بە بچووکی لە چێشتخانەکەی خۆمان بە دەست دروست دەکرێن — بە کەرەی ڕاستەقینە و ڤانیلای ڕاستەقینە.
-              </p>
-            </div>
+              <div id="fontPreviewFrame" class="font-preview-frame" style="margin-top:24px;padding:24px;background:var(--shell);border-radius:16px;border:1px solid var(--line);direction:rtl;text-align:right;">
+                <div style="font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">${this.t('fontPreview')} (کوردی)</div>
+                <h4 id="fontPreviewHeading" style="font-size:1.6rem;margin-bottom:10px;font-family:'${kuDisp}',serif;">کێکی تایبەت بۆ ئاهەنگەکەت</h4>
+                <p id="fontPreviewBody" style="font-size:.95rem;color:var(--muted);line-height:1.9;font-family:'${kuBody}',sans-serif;">
+                  کێک و کاپکێک و شیرینی بە بچووکی لە چێشتخانەکەی خۆمان بە دەست دروست دەکرێن — بە کەرەی ڕاستەقینە و ڤانیلای ڕاستەقینە.
+                </p>
+              </div>
+
+              <div id="fontPreviewFrameEn" class="font-preview-frame" style="margin-top:16px;padding:24px;background:var(--shell);border-radius:16px;border:1px solid var(--line);direction:ltr;text-align:left;">
+                <div style="font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">${this.t('fontPreview')} (English)</div>
+                <h4 id="fontPreviewHeadingEn" style="font-size:1.6rem;margin-bottom:10px;font-family:'${enDisp}',serif;">Bespoke Celebration Cakes</h4>
+                <p id="fontPreviewBodyEn" style="font-size:.95rem;color:var(--muted);line-height:1.6;font-family:'${enBody}',sans-serif;">
+                  Handcrafted layered cakes, cupcakes, and French desserts baked fresh daily with organic butter, bourbon vanilla, and seasonal fruit.
+                </p>
+              </div>
             </div>
 
             <div style="margin-top:20px;display:flex;align-items:center;gap:12px;">
               <button class="btn btn--primary btn--sm" type="submit">${this.t('saveFonts')}</button>
             </div>
             <div style="font-size:0.8rem;color:var(--muted);margin-top:10px;">
-              Font changes apply live as you select them; click save to persist.
+              Font selections preview live immediately; click save to persist your preferences.
             </div>
           </form>
         `;
@@ -3738,6 +3975,7 @@ const app = {
     
     // Check current preset
     const currentPreset = this.config.theme ? this.config.theme.presetId : 'berry';
+    const currentMode = this.config.theme ? (this.config.theme.mode || 'light') : 'light';
     
     let presetsHtml = '';
     Object.keys(THEMES).forEach(id => {
@@ -3762,6 +4000,14 @@ const app = {
     content.innerHTML = `
       <div class="theme-panel-layout">
         <div>
+          <div style="margin-bottom: 20px;">
+            <div style="font-size:0.85rem;font-weight:600;color:var(--muted);margin-bottom:8px;">Appearance Mode</div>
+            <div class="switch-group" style="display:inline-flex;">
+              <button type="button" class="switch-btn ${currentMode !== 'dark' ? 'is-active' : ''}" onclick="app.setThemeMode('light')">☀️ Light</button>
+              <button type="button" class="switch-btn ${currentMode === 'dark' ? 'is-active' : ''}" onclick="app.setThemeMode('dark')">🌙 Dark</button>
+            </div>
+          </div>
+
           <h4 style="font-family:var(--font-serif);margin-bottom:16px;">${this.t('themePresetTitle')}</h4>
           <div class="theme-presets" style="margin-bottom:24px;">
             ${presetsHtml}
@@ -3823,10 +4069,12 @@ const app = {
     if (!THEMES[presetId]) return;
     
     const autoDark = document.getElementById('cfgAutoDark') ? document.getElementById('cfgAutoDark').checked : (this.config.theme ? this.config.theme.autoDark : false);
+    const mode = this.config.theme ? (this.config.theme.mode || 'light') : 'light';
 
     this.config.theme = {
       presetId: presetId,
       tokens: THEMES[presetId].tokens,
+      mode: mode,
       autoDark: autoDark
     };
     
@@ -4898,34 +5146,56 @@ const app = {
   },
 
   handleFontPreviewChange() {
-    const bodySel = document.getElementById('cfgKuBody');
-    const dispSel = document.getElementById('cfgKuDisplay');
-    if (!bodySel || !dispSel) return;
+    const kuBodySel = document.getElementById('cfgKuBody');
+    const kuDispSel = document.getElementById('cfgKuDisplay');
+    const enBodySel = document.getElementById('cfgEnBody');
+    const enDispSel = document.getElementById('cfgEnDisplay');
 
-    const body = bodySel.value;
-    const disp = dispSel.value;
-    const heading = document.getElementById('fontPreviewHeading');
-    const para = document.getElementById('fontPreviewBody');
+    const kuBody = kuBodySel ? kuBodySel.value : ((this.config && this.config.kurdishBodyFont) || 'Vazirmatn');
+    const kuDisp = kuDispSel ? kuDispSel.value : ((this.config && this.config.kurdishDisplayFont) || 'Vazirmatn');
+    const enBody = enBodySel ? enBodySel.value : ((this.config && this.config.englishBodyFont) || 'DM Sans');
+    const enDisp = enDispSel ? enDispSel.value : ((this.config && this.config.englishDisplayFont) || 'Cormorant Garamond');
 
-    if (heading) heading.style.fontFamily = `'${disp}', sans-serif`;
-    if (para) para.style.fontFamily = `'${body}', sans-serif`;
+    const kuHeading = document.getElementById('fontPreviewHeading');
+    const kuPara = document.getElementById('fontPreviewBody');
+    if (kuHeading) kuHeading.style.fontFamily = `'${kuDisp}', serif`;
+    if (kuPara) kuPara.style.fontFamily = `'${kuBody}', sans-serif`;
 
-    // Also apply live to the whole page so the dev sees the effect immediately
-    document.documentElement.style.setProperty('--font-ku-body', `'${body}', system-ui, sans-serif`);
-    document.documentElement.style.setProperty('--font-ku-display', `'${disp}', serif`);
+    const enHeading = document.getElementById('fontPreviewHeadingEn');
+    const enPara = document.getElementById('fontPreviewBodyEn');
+    if (enHeading) enHeading.style.fontFamily = `'${enDisp}', serif`;
+    if (enPara) enPara.style.fontFamily = `'${enBody}', sans-serif`;
+
+    // Apply preview variables
+    document.documentElement.style.setProperty('--font-ku-body', `'${kuBody}', system-ui, sans-serif`);
+    document.documentElement.style.setProperty('--font-ku-display', `'${kuDisp}', serif`);
     
     if (this.lang === 'ku') {
-      document.documentElement.style.setProperty('--font-body', `'${body}', system-ui, sans-serif`);
-      document.documentElement.style.setProperty('--font-heading', `'${disp}', serif`);
+      document.documentElement.style.setProperty('--font-body', `'${kuBody}', system-ui, sans-serif`);
+      document.documentElement.style.setProperty('--font-heading', `'${kuDisp}', serif`);
+      document.documentElement.style.setProperty('--font-serif', `'${kuDisp}', serif`);
+      document.documentElement.style.setProperty('--font-ui', `'${kuBody}', system-ui, sans-serif`);
+      document.documentElement.style.setProperty('--font-accent', `'${kuDisp}', serif`);
+    } else {
+      document.documentElement.style.setProperty('--font-body', `'${enBody}', system-ui, sans-serif`);
+      document.documentElement.style.setProperty('--font-heading', `'${enDisp}', serif`);
+      document.documentElement.style.setProperty('--font-serif', `'${enDisp}', serif`);
+      document.documentElement.style.setProperty('--font-ui', `'${enBody}', system-ui, sans-serif`);
+      document.documentElement.style.setProperty('--font-accent', `'${enDisp}', serif`);
     }
   },
 
   saveFontSettings(e) {
     if (e) e.preventDefault();
-    const bodySel = document.getElementById('cfgKuBody');
-    const dispSel = document.getElementById('cfgKuDisplay');
-    if (bodySel) this.config.kurdishBodyFont = bodySel.value;
-    if (dispSel) this.config.kurdishDisplayFont = dispSel.value;
+    const kuBodySel = document.getElementById('cfgKuBody');
+    const kuDispSel = document.getElementById('cfgKuDisplay');
+    const enBodySel = document.getElementById('cfgEnBody');
+    const enDispSel = document.getElementById('cfgEnDisplay');
+
+    if (kuBodySel) this.config.kurdishBodyFont = kuBodySel.value;
+    if (kuDispSel) this.config.kurdishDisplayFont = kuDispSel.value;
+    if (enBodySel) this.config.englishBodyFont = enBodySel.value;
+    if (enDispSel) this.config.englishDisplayFont = enDispSel.value;
 
     this.saveConfig();
     this.applyFonts();
@@ -4934,48 +5204,96 @@ const app = {
 
   applyFonts() {
     const isKu = this.lang === 'ku';
-    const body = (this.config && this.config.kurdishBodyFont) || 'Noto Sans Arabic';
-    const disp = (this.config && this.config.kurdishDisplayFont) || 'Noto Sans Arabic';
+    const kuBody = (this.config && this.config.kurdishBodyFont) || 'Vazirmatn';
+    const kuDisp = (this.config && this.config.kurdishDisplayFont) || 'Vazirmatn';
+    const enBody = (this.config && this.config.englishBodyFont) || 'DM Sans';
+    const enDisp = (this.config && this.config.englishDisplayFont) || 'Cormorant Garamond';
     
-    // Set admin preview variables
-    document.documentElement.style.setProperty('--font-ku-body', `'${body}', system-ui, sans-serif`);
-    document.documentElement.style.setProperty('--font-ku-display', `'${disp}', serif`);
+    // Set preview variables
+    document.documentElement.style.setProperty('--font-ku-body', `'${kuBody}', system-ui, sans-serif`);
+    document.documentElement.style.setProperty('--font-ku-display', `'${kuDisp}', serif`);
     
-    // Set actual app variables so fonts change in preview
+    // Apply based on current language
     if (isKu) {
-      document.documentElement.style.setProperty('--font-body', `'${body}', system-ui, sans-serif`);
-      document.documentElement.style.setProperty('--font-heading', `'${disp}', serif`);
-      document.documentElement.style.setProperty('--font-ui', `'${body}', system-ui, sans-serif`);
-      document.documentElement.style.setProperty('--font-accent', `'${disp}', serif`);
+      document.documentElement.style.setProperty('--font-body', `'${kuBody}', system-ui, sans-serif`);
+      document.documentElement.style.setProperty('--font-heading', `'${kuDisp}', serif`);
+      document.documentElement.style.setProperty('--font-serif', `'${kuDisp}', serif`);
+      document.documentElement.style.setProperty('--font-ui', `'${kuBody}', system-ui, sans-serif`);
+      document.documentElement.style.setProperty('--font-accent', `'${kuDisp}', serif`);
     } else {
-      document.documentElement.style.setProperty('--font-body', `'DM Sans', system-ui, sans-serif`);
-      document.documentElement.style.setProperty('--font-heading', `'DM Serif Display', serif`);
-      document.documentElement.style.setProperty('--font-ui', `'Outfit', system-ui, sans-serif`);
-      document.documentElement.style.setProperty('--font-accent', `'Lora', serif`);
+      document.documentElement.style.setProperty('--font-body', `'${enBody}', system-ui, sans-serif`);
+      document.documentElement.style.setProperty('--font-heading', `'${enDisp}', serif`);
+      document.documentElement.style.setProperty('--font-serif', `'${enDisp}', serif`);
+      document.documentElement.style.setProperty('--font-ui', `'${enBody}', system-ui, sans-serif`);
+      document.documentElement.style.setProperty('--font-accent', `'${enDisp}', serif`);
     }
   },
 
   applyTheme(tokens) {
     const r = document.documentElement.style;
-    let activeTokens = { ...tokens };
+    const baseTokens = tokens || (this.config.theme && this.config.theme.tokens) || THEMES.berry.tokens;
+    let activeTokens = { ...baseTokens };
     
+    const mode = this.config && this.config.theme && this.config.theme.mode;
     const isAutoDark = this.config && this.config.theme && this.config.theme.autoDark;
     const isSystemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const presetId = this.config && this.config.theme && this.config.theme.presetId;
     
-    if (isAutoDark && isSystemDark) {
+    const isDark = mode === 'dark' || (mode !== 'light' && isAutoDark && isSystemDark) || (presetId === 'midnight' && mode !== 'light');
+    
+    if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      document.documentElement.classList.add('is-dark');
+      document.body.classList.add('is-dark');
+
       activeTokens = {
-        ...tokens,
-        cream: '#121212',
-        shell: '#1E1E1E',
-        blush: '#2C2C2C',
-        linen: '#252525',
-        cocoa: '#E0E0E0',
-        cocoaSoft: '#B0B0B0',
-        ink: '#F5F5F5',
-        muted: '#A0A0A0',
-        line: '#333333',
-        lineStrong: '#444444'
+        ...activeTokens,
+        cream: '#15110E',
+        shell: '#1E1814',
+        surface: '#241D18',
+        surfaceHover: '#2E241E',
+        surfaceInput: '#1A1411',
+        blush: '#342820',
+        linen: '#221B16',
+        berry: activeTokens.berry && activeTokens.berry !== '#8E3B4A' && activeTokens.berry !== '#1F2E4A' ? activeTokens.berry : '#E07A5F',
+        berryDark: '#C66247',
+        berryDeep: '#F4A58E',
+        cocoa: '#F7EFE8',
+        cocoaSoft: '#D6C6B8',
+        gold: '#E5B85C',
+        goldSoft: '#F3D48E',
+        ink: '#EDE3DA',
+        muted: '#A89687',
+        line: '#3A2E26',
+        lineStrong: '#4F3F34',
+        headerBg: 'rgba(21, 17, 14, 0.94)',
+        headerBgStuck: 'rgba(21, 17, 14, 0.98)',
+        footerBg: '#100C0A',
+        footerText: '#EDE3DA',
+        footerMuted: 'rgba(237, 227, 218, 0.7)'
       };
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.classList.remove('is-dark');
+      document.body.classList.remove('is-dark');
+
+      activeTokens = {
+        surface: '#FFFFFF',
+        surfaceHover: '#FFF7F0',
+        surfaceInput: '#FFFFFF',
+        headerBg: 'rgba(247, 241, 232, 0.94)',
+        headerBgStuck: 'rgba(247, 241, 232, 0.98)',
+        footerBg: '#2C211B',
+        footerText: '#FFFBF7',
+        footerMuted: 'rgba(255, 251, 247, 0.75)',
+        ...activeTokens
+      };
+    }
+
+    if (isAutoDark) {
+      document.documentElement.setAttribute('data-auto-dark', 'true');
+    } else {
+      document.documentElement.removeAttribute('data-auto-dark');
     }
 
     Object.entries(activeTokens).forEach(([key, value]) => {
@@ -4991,7 +5309,61 @@ const app = {
       metaTheme.name = "theme-color";
       document.head.appendChild(metaTheme);
     }
-    metaTheme.content = activeTokens.berry;
+    metaTheme.content = isDark ? '#15110E' : activeTokens.berry;
+
+    this.updateThemeToggleUI(isDark);
+  },
+
+  updateThemeToggleUI(isDark) {
+    const btn = document.getElementById('themeModeToggle');
+    const icon = document.getElementById('themeModeIcon');
+    const mobileBtn = document.getElementById('mobileThemeModeToggle');
+    const mobileIcon = document.getElementById('mobileThemeModeIcon');
+    const text = isDark ? '☀️' : '🌙';
+    if (icon) icon.textContent = text;
+    if (mobileIcon) mobileIcon.textContent = text;
+    if (btn) {
+      btn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      btn.title = isDark ? (this.lang === 'ku' ? 'دۆخی ڕووناک' : 'Switch to Light Mode') : (this.lang === 'ku' ? 'دۆخی تاریک' : 'Switch to Dark Mode');
+      btn.classList.toggle('is-active', isDark);
+    }
+    if (mobileBtn) {
+      mobileBtn.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      mobileBtn.title = isDark ? (this.lang === 'ku' ? 'دۆخی ڕووناک' : 'Switch to Light Mode') : (this.lang === 'ku' ? 'دۆخی تاریک' : 'Switch to Dark Mode');
+      mobileBtn.classList.toggle('is-active', isDark);
+    }
+  },
+
+  toggleDarkMode() {
+    if (!this.config.theme) this.config.theme = { presetId: 'berry', autoDark: false };
+    const currentMode = this.config.theme.mode || (document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+    const newMode = currentMode === 'dark' ? 'light' : 'dark';
+    this.config.theme.mode = newMode;
+    this.saveConfig();
+    const presetId = this.config.theme.presetId || 'berry';
+    const tokens = (THEMES[presetId] && THEMES[presetId].tokens) ? THEMES[presetId].tokens : this.config.theme.tokens;
+    this.applyTheme(tokens);
+    const msg = newMode === 'dark' 
+      ? (this.lang === 'ku' ? 'دۆخی تاریک چالاککرا' : 'Dark theme activated') 
+      : (this.lang === 'ku' ? 'دۆخی ڕووناک چالاککرا' : 'Light theme activated');
+    this.showToast(msg, 'info');
+  },
+
+  setThemeMode(mode) {
+    if (!this.config.theme) this.config.theme = { presetId: 'berry', autoDark: false };
+    this.config.theme.mode = mode;
+    this.saveConfig();
+    const presetId = this.config.theme.presetId || 'berry';
+    const tokens = (THEMES[presetId] && THEMES[presetId].tokens) ? THEMES[presetId].tokens : this.config.theme.tokens;
+    this.applyTheme(tokens);
+    const panelContent = document.getElementById('panelContent');
+    if (panelContent && document.getElementById('panelTitle')?.textContent === this.t('tabTheme')) {
+      this.renderThemeTab(panelContent);
+    }
+    const msg = mode === 'dark' 
+      ? (this.lang === 'ku' ? 'دۆخی تاریک چالاککرا' : 'Dark theme activated') 
+      : (this.lang === 'ku' ? 'دۆخی ڕووناک چالاککرا' : 'Light theme activated');
+    this.showToast(msg, 'info');
   },
 
   toggleWatermarkSetting(checked) {

@@ -39,6 +39,13 @@
           <button type="button" class="switch-btn" id="btnCurIqd" onclick="app.setCurrency('IQD')">IQD د.ع</button>
         </div>
 
+        <!-- Theme Mode Toggle -->
+        <div class="switch-group" role="group" aria-label="Theme Mode">
+          <button type="button" class="switch-btn" id="themeModeToggle" onclick="app.toggleDarkMode()" title="Toggle Dark / Light Mode" aria-label="Toggle theme mode">
+            <span id="themeModeIcon">🌙</span>
+          </button>
+        </div>
+
         <!-- Auth / User Chip -->
         <div id="desktopAuthContainer">
           <button class="btn btn--primary btn--sm" id="btnSignInDesktop" onclick="app.openAuthModal()" data-i18n="btnSignIn">Sign In</button>
@@ -69,6 +76,11 @@
       <div class="switch-group" id="mobileCurrencySwitcher" role="group" aria-label="Currency Selector">
         <button type="button" class="switch-btn" id="btnCurUsdMobile" onclick="app.setCurrency('USD')">$ USD</button>
         <button type="button" class="switch-btn" id="btnCurIqdMobile" onclick="app.setCurrency('IQD')">IQD د.ع</button>
+      </div>
+      <div class="switch-group" role="group" aria-label="Theme Mode">
+        <button type="button" class="switch-btn" id="mobileThemeModeToggle" onclick="app.toggleDarkMode()" title="Toggle Dark / Light Mode" aria-label="Toggle theme mode">
+          <span id="mobileThemeModeIcon">🌙</span>
+        </button>
       </div>
     </div>
 
@@ -519,34 +531,36 @@
 
         <!-- Customer Form -->
         <form id="customerAuthForm" onsubmit="app.handleCustomerSubmit(event)">
-          <p class="text-small" style="color:var(--muted);margin-bottom:16px;" data-i18n="customerDesc">
-            Sign in with your phone and name. No password needed! Your name will pre-fill your WhatsApp orders.
+          <p class="text-small" style="color:var(--muted);margin-bottom:16px;">
+            Sign in with Google or your phone number. Your name will pre-fill your orders.
           </p>
           <div class="form-group">
-            <label class="form-label" for="custMobile" data-i18n="labelPhone">Mobile Number (min 6 digits)</label>
-            <input type="tel" id="custMobile" class="form-input" placeholder="+964 750 ..." required autocomplete="tel" />
+            <label class="form-label" for="custMobile" data-i18n="labelPhone">Mobile Number</label>
+            <input type="tel" id="custMobile" class="form-input" placeholder="+964 750 ..." autocomplete="tel" />
           </div>
           <div class="form-group">
             <label class="form-label" for="custName" data-i18n="labelDisplayName">Your Name / Display Name</label>
-            <input type="text" id="custName" class="form-input" placeholder="e.g. Sara" required autocomplete="name" />
+            <input type="text" id="custName" class="form-input" placeholder="e.g. Sara" autocomplete="name" />
           </div>
-          <button type="submit" class="btn btn--primary" style="width:100%;margin-top:8px;" data-i18n="btnContinue">Continue as Customer</button>
+          <button type="submit" class="btn btn--primary" style="width:100%;margin-top:8px;">Continue with Google / Phone</button>
         </form>
 
         <!-- Staff / Operator Login Form (Shared by Admin and Developer tabs, ZERO credential hints) -->
         <form id="staffAuthForm" style="display:none;" onsubmit="app.handleStaffSubmit(event)">
           <p class="text-small" id="staffFormDesc" style="color:var(--muted);margin-bottom:16px;" data-i18n="staffFormDesc">
-            Please enter your management credentials to access the bakery control panel.
+            Please enter your management credentials or login with Google to access the bakery control panel.
           </p>
-          <div class="form-group">
+          <div class="form-group" id="staffUsernameGroup">
             <label class="form-label" for="staffUsername" data-i18n="labelUsername">Username</label>
-            <input type="text" id="staffUsername" class="form-input" placeholder="Username" required autocomplete="username" />
+            <input type="text" id="staffUsername" class="form-input" placeholder="Username" autocomplete="username" />
           </div>
-          <div class="form-group">
+          <div class="form-group" id="staffPasswordGroup">
             <label class="form-label" for="staffPassword" data-i18n="labelPassword">Password</label>
-            <input type="password" id="staffPassword" class="form-input" placeholder="••••••••" required autocomplete="current-password" />
+            <input type="password" id="staffPassword" class="form-input" placeholder="••••••••" autocomplete="current-password" />
           </div>
-          <button type="submit" class="btn btn--primary" style="width:100%;margin-top:8px;" data-i18n="btnLogin">Login to Dashboard</button>
+          <button type="submit" class="btn btn--primary" style="width:100%;margin-top:8px;" id="btnStaffLogin">
+            Login to Dashboard (via Google)
+          </button>
         </form>
       </div>
     </div>

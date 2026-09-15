@@ -14,7 +14,7 @@ ${styles}
 <body>
 ${body}
 
-  <script>
+  <script type="module">
 ${app}
   </script>
 </body>

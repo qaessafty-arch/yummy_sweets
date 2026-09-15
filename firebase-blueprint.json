@@ -1,0 +1,75 @@
+{
+  "entities": {
+    "Config": {
+      "title": "Store Config",
+      "description": "General application configuration.",
+      "type": "object",
+      "properties": {
+        "shopNameEn": { "type": "string" },
+        "shopNameKu": { "type": "string" },
+        "themePreset": { "type": "string" },
+        "themeMode": { "type": "string" }
+      }
+    },
+    "User": {
+      "title": "User Profile",
+      "description": "Registered user of the application.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "enum": ["dev", "admin", "customer"] }
+      },
+      "required": ["name", "role"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Bakery product for sale.",
+      "type": "object",
+      "properties": {
+        "category": { "type": "string", "maxLength": 50 },
+        "emoji": { "type": "string", "maxLength": 10 },
+        "img": { "type": "string", "maxLength": 1000 },
+        "priceUSD": { "type": "number" },
+        "tag": { "type": "string", "maxLength": 50 },
+        "nameEn": { "type": "string", "maxLength": 100 },
+        "nameKu": { "type": "string", "maxLength": 100 },
+        "descEn": { "type": "string", "maxLength": 500 },
+        "descKu": { "type": "string", "maxLength": 500 },
+        "unitEn": { "type": "string", "maxLength": 50 },
+        "unitKu": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["category", "priceUSD", "nameEn"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "A customer order.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "totalUSD": { "type": "number" },
+        "totalIQD": { "type": "number" },
+        "status": { "type": "string", "enum": ["pending", "confirmed", "completed", "cancelled"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "totalUSD", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "config/{configId}": {
+      "schema": { "$ref": "Config" },
+      "description": "Store configuration documents."
+    },
+    "users/{userId}": {
+      "schema": { "$ref": "User" },
+      "description": "User profiles."
+    },
+    "products/{productId}": {
+      "schema": { "$ref": "Product" },
+      "description": "Available products."
+    },
+    "orders/{orderId}": {
+      "schema": { "$ref": "Order" },
+      "description": "Customer orders."
+    }
+  }
+}
