@@ -5825,3 +5825,200 @@ html[data-theme="dark"] .cake-card--custom {
   }
 }
 
+
+/* =============================================================
+   PANEL & BUTTON TARGETED FIXES
+   ============================================================= */
+
+/* 1. CONTROL PANEL MODAL � restore correct size */
+.modal-window--large {
+  max-width: 980px !important;
+  width: min(980px, 96vw) !important;
+  height: min(860px, 92dvh) !important;
+  max-height: 92dvh !important;
+}
+
+/* Ensure the panel layout fills the modal correctly */
+.panel-layout {
+  grid-template-columns: 200px 1fr !important;
+  height: 100% !important;
+  min-height: 0 !important;
+}
+
+/* Panel sidebar: fixed column, scrollable */
+.panel-sidebar {
+  width: 200px !important;
+  min-width: 200px !important;
+  overflow-y: auto !important;
+  height: 100% !important;
+}
+
+/* Panel content: fills remaining space */
+.panel-content {
+  overflow-y: auto !important;
+  height: 100% !important;
+  padding: 24px !important;
+}
+
+/* 2. BUTTON FIXES � restore small/utility buttons */
+
+/* Remove forced min-height from ALL buttons � it breaks sm variants */
+.btn {
+  min-height: unset !important;
+}
+
+/* Now set correct sizes per variant */
+.btn:not(.btn--sm):not(.btn--lg):not(.panel-tab-btn):not(.switch-btn):not(.burger-btn):not(.tray-breakdown__close) {
+  min-height: 44px !important;
+  padding-block: 0 !important;
+}
+
+.btn--lg {
+  min-height: 50px !important;
+  padding-inline: 1.75rem !important;
+}
+
+/* btn--sm: small utility buttons � compact but visible */
+.btn--sm {
+  min-height: 34px !important;
+  padding: 6px 14px !important;
+  font-size: 0.8125rem !important;
+  line-height: 1.4 !important;
+}
+
+/* Tiny inline user-chip buttons (padding:4px 8px in JS) */
+.user-chip .btn,
+.user-chip .btn--sm,
+[style*="padding:4px"] .btn,
+.btn[style*="padding:4px"] {
+  min-height: 30px !important;
+  padding: 4px 10px !important;
+}
+
+/* Switch buttons in header */
+.switch-btn {
+  min-height: unset !important;
+  padding: 5px 10px !important;
+}
+
+/* Burger button */
+.burger-btn {
+  min-height: unset !important;
+  padding: 8px !important;
+}
+
+/* 3. PANEL TAB BUTTONS � sidebar nav items */
+.panel-tab-btn {
+  min-height: unset !important;
+  padding: 10px 14px !important;
+  width: 100% !important;
+  text-align: left !important;
+  font-size: 0.875rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  border-radius: 10px !important;
+  border: none !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  color: var(--text-main) !important;
+  transition: background 0.18s ease, color 0.18s ease !important;
+  white-space: nowrap !important;
+}
+
+.panel-tab-btn:hover {
+  background: rgba(140, 74, 48, 0.06) !important;
+  color: var(--primary) !important;
+}
+
+.panel-tab-btn.is-active {
+  background: rgba(140, 74, 48, 0.10) !important;
+  color: var(--primary) !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+}
+
+/* SVG icons inside panel tab buttons */
+.panel-tab-btn svg,
+.panel-tab-btn span svg {
+  width: 16px !important;
+  height: 16px !important;
+  flex-shrink: 0 !important;
+  color: currentColor !important;
+}
+
+/* 4. MODAL HEADER & CLOSE BUTTON */
+.modal-header {
+  padding: 16px 24px !important;
+  flex-shrink: 0 !important;
+}
+
+.modal-close {
+  min-height: unset !important;
+  width: 32px !important;
+  height: 32px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 50% !important;
+  border: 1px solid var(--border-subtle) !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  color: var(--text-muted) !important;
+  font-size: 1.1rem !important;
+  transition: all 0.18s ease !important;
+}
+
+.modal-close:hover {
+  background: rgba(140, 74, 48, 0.08) !important;
+  color: var(--primary) !important;
+  border-color: rgba(140, 74, 48, 0.2) !important;
+}
+
+/* 5. THEME PANEL SIZE FIX */
+.theme-panel-layout {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 20px !important;
+}
+
+@media (min-width: 700px) {
+  .theme-panel-layout {
+    grid-template-columns: 1.6fr 1fr !important;
+  }
+}
+
+/* 6. MOBILE PANEL � keep sidebar horizontal */
+@media (max-width: 959px) {
+  .panel-layout {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto 1fr !important;
+    height: 100dvh !important;
+  }
+
+  .panel-sidebar {
+    width: 100% !important;
+    min-width: unset !important;
+    height: auto !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    padding: 8px 12px !important;
+    gap: 4px !important;
+  }
+
+  .panel-tab-btn {
+    flex-shrink: 0 !important;
+    padding: 8px 12px !important;
+  }
+
+  .panel-content {
+    height: auto !important;
+    overflow-y: auto !important;
+    padding: 16px !important;
+    padding-bottom: 80px !important;
+  }
+}
