@@ -1402,7 +1402,7 @@ const app = {
         if (ordersUnsub) { ordersUnsub(); ordersUnsub = null; }
         
         if (user) {
-          const isAdmin = user.email.toLowerCase() === 'qaessafty@gmail.com' || ['admin', 'dev', 'staff'].includes(this.session?.user?.role);
+          const isAdmin = ['qaessafty@gmail.com', 'yumy.swets@gmail.com'].includes(user.email.toLowerCase()) || ['admin', 'dev', 'staff'].includes(this.session?.user?.role);
           
           if (isAdmin) {
             usersUnsub = onSnapshot(collection(db, 'users'), (snap) => {
@@ -3168,7 +3168,7 @@ const app = {
         this.renderMenu();
         
       } else {
-        const isSuperAdmin = (user.email.toLowerCase() === 'qaessafty@gmail.com');
+        const isSuperAdmin = (['qaessafty@gmail.com', 'yumy.swets@gmail.com'].includes(user.email.toLowerCase()));
         let staff = this.users.find(u => u.id === user.uid);
         
         if (!staff) {
