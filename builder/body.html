@@ -1,0 +1,746 @@
+  <!-- Announcement Bar -->
+  <aside class="announcement-bar" id="announcementBar" role="region" aria-label="Store Announcement">
+    <span id="announcementText" data-i18n="announcementText">Pre-order for weekend celebrations! <strong>Free local delivery</strong> on orders over $50.</span>
+  </aside>
+
+  <!-- Sticky Site Header -->
+  <header class="site-header" id="mainHeader">
+    <div class="container header__inner">
+      <!-- Brand Logo -->
+      <a href="#hero" class="header__brand" id="headerBrandLink" aria-label="Yummy Sweets Homepage">
+        <span class="logo__icon logo__mark" id="headerLogoIcon" data-logo>🎂</span>
+        <div class="brand__text">
+          <span class="brand__name" id="headerShopName">Yummy Sweets</span>
+          <span class="brand__tagline" id="headerShopTagline" data-i18n="shopTagline">Artisanal Boutique Bakery</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="header__nav" id="desktopNav" aria-label="Primary Navigation">
+        <a href="#menu" class="nav__link" data-i18n="navMenu">Menu</a>
+        <a href="#how-it-works" class="nav__link" data-i18n="navHowItWorks">How It Works</a>
+        <a href="#story" class="nav__link" data-i18n="navOurStory">Our Story</a>
+        <a href="#reviews" class="nav__link" data-i18n="navReviews">Reviews</a>
+        <a href="#contact" class="nav__link" data-i18n="navContact">Contact</a>
+        <a href="#faq" class="nav__link" data-i18n="navFaq">FAQ</a>
+      </nav>
+
+      <!-- Header Controls & Auth -->
+      <div class="header__actions">
+        <!-- Language Switcher -->
+        <div class="switch-group" role="group" aria-label="Language Selector">
+          <button type="button" class="switch-btn is-active" id="btnLangEn" onclick="app.setLanguage('en')">EN</button>
+          <button type="button" class="switch-btn" id="btnLangKu" onclick="app.setLanguage('ku')">کوردی</button>
+        </div>
+
+        <!-- Currency Switcher -->
+        <div class="switch-group" id="headerCurrencySwitcher" role="group" aria-label="Currency Selector">
+          <button type="button" class="switch-btn is-active" id="btnCurUsd" onclick="app.setCurrency('USD')">$ USD</button>
+          <button type="button" class="switch-btn" id="btnCurIqd" onclick="app.setCurrency('IQD')">IQD د.ع</button>
+        </div>
+
+        <!-- Theme Mode Toggle -->
+        <div class="switch-group" role="group" aria-label="Theme Mode">
+          <button type="button" class="switch-btn" id="themeModeToggle" onclick="app.toggleDarkMode()" title="Toggle Dark / Light Mode" aria-label="Toggle theme mode">
+            <span id="themeModeIcon">🌙</span>
+          </button>
+        </div>
+
+        <!-- Auth / User Chip -->
+        <div id="desktopAuthContainer">
+          <button class="btn btn--primary btn--sm" id="btnSignInDesktop" onclick="app.openAuthModal()" data-i18n="btnSignIn">Sign In</button>
+        </div>
+
+        <!-- Mobile Burger Button -->
+        <button class="burger-btn" id="burgerBtn" onclick="app.toggleMobileMenu()" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="mobileNav">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <nav class="mobile-nav" id="mobileNav" aria-label="Mobile Navigation">
+    <a href="#menu" class="nav__link" onclick="app.closeMobileMenu()" data-i18n="navMenu">Menu</a>
+    <a href="#how-it-works" class="nav__link" onclick="app.closeMobileMenu()" data-i18n="navHowItWorks">How It Works</a>
+    <a href="#story" class="nav__link" onclick="app.closeMobileMenu()" data-i18n="navOurStory">Our Story</a>
+    <a href="#reviews" class="nav__link" onclick="app.closeMobileMenu()" data-i18n="navReviews">Reviews</a>
+    <a href="#contact" class="nav__link" onclick="app.closeMobileMenu()" data-i18n="navContact">Contact</a>
+    <a href="#faq" class="nav__link" onclick="app.closeMobileMenu()" data-i18n="navFaq">FAQ</a>
+
+    <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;">
+      <div class="switch-group" role="group" aria-label="Language Selector">
+        <button type="button" class="switch-btn" id="btnLangEnMobile" onclick="app.setLanguage('en')">EN</button>
+        <button type="button" class="switch-btn" id="btnLangKuMobile" onclick="app.setLanguage('ku')">کوردی</button>
+      </div>
+      <div class="switch-group" id="mobileCurrencySwitcher" role="group" aria-label="Currency Selector">
+        <button type="button" class="switch-btn" id="btnCurUsdMobile" onclick="app.setCurrency('USD')">$ USD</button>
+        <button type="button" class="switch-btn" id="btnCurIqdMobile" onclick="app.setCurrency('IQD')">IQD د.ع</button>
+      </div>
+      <div class="switch-group" role="group" aria-label="Theme Mode">
+        <button type="button" class="switch-btn" id="mobileThemeModeToggle" onclick="app.toggleDarkMode()" title="Toggle Dark / Light Mode" aria-label="Toggle theme mode">
+          <span id="mobileThemeModeIcon">🌙</span>
+        </button>
+      </div>
+    </div>
+
+    <div id="mobileAuthContainer" style="margin-top:8px;">
+      <!-- Populated dynamically by app.updateAuthUI() -->
+    </div>
+  </nav>
+
+  <main id="mainContent">
+    <!-- Hero Section -->
+    <section class="section hero" id="hero">
+      <img class="hero-bg-img" src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1800&auto=format&fit=crop&q=80" alt="" aria-hidden="true" referrerpolicy="no-referrer" onerror="this.style.display='none';" />
+      <div class="hero-bg-veil" aria-hidden="true"></div>
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="container hero__grid">
+        <div class="hero__content">
+          <span class="eyebrow" data-i18n="heroEyebrow">Artisanal Bakery & Pâtisserie</span>
+          <h1 class="hero__title" data-i18n="heroTitle">Handcrafted cakes made with <em>passion</em> & love</h1>
+          <p class="lead" data-i18n="heroLead">We craft bespoke celebratory cakes, delicate pastries, and decadent cupcakes daily using premium organic ingredients. Delivered straight to your celebration with seamless WhatsApp ordering.</p>
+          
+          <div class="hero__ctas">
+            <a href="#menu" class="btn btn--primary btn--lg" id="heroCtaPrimary" data-i18n="heroCtaPrimary">Explore Our Menu</a>
+            <button type="button" class="btn btn--ghost btn--lg" id="heroCtaSecondary" onclick="app.openWhatsAppDirect()" data-i18n="heroCtaSecondary">Chat with Baker</button>
+          </div>
+          <div class="hero__trust">
+            <div class="trust-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span data-i18n="trust1">100% Organic Flours</span>
+            </div>
+            <div class="trust-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span data-i18n="trust2">Same-Day Fresh Bake</span>
+            </div>
+            <div class="trust-item">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span data-i18n="trust3">Custom Messages</span>
+            </div>
+          </div>
+          <div class="hero__quote" style="margin-top: 32px; padding: 16px 24px; border-left: 3px solid var(--berry); background: var(--surface); opacity: 0.95; border-radius: 0 12px 12px 0;">
+            <p style="font-size: 1.1rem; font-weight: 500; font-style: italic; color: var(--ink); margin-bottom: 8px;">"Life is short, make it sweet."</p>
+            <p style="font-size: 1.2rem; font-weight: 600; color: var(--berry); font-family: 'Vazirmatn', sans-serif;">"ژیان کورتە، با شیرین بێت."</p>
+          </div>
+        </div>
+        <div class="hero__visual">
+          <div class="hero__card">
+            <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=900&auto=format&fit=crop&q=80" alt="Artisan celebration cake" class="hero__img" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='flex';" />
+            <div class="hero__cake-emoji" aria-label="Celebration Cake Illustration" style="display:none;">🎂</div>
+          </div>
+
+          <div class="hero__float-review">
+            <div class="stars">★★★★★</div>
+            <p class="text-small" data-i18n="heroReviewSnippet">"Best Red Velvet in town! Unmatched flavor."</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Features Section -->
+    <section class="section section--shell" id="features">
+      <div class="container">
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></div>
+            <h3 class="feature-card__title" data-i18n="feat1Title">Real Ingredients</h3>
+            <p data-i18n="feat1Desc">Pure butter, Belgian chocolate, fresh seasonal berries, and zero artificial preservatives.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13" rx="1"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
+            <h3 class="feature-card__title" data-i18n="feat2Title">Careful Delivery</h3>
+            <p data-i18n="feat2Desc">Handled with gentle temperature-controlled care so your cake arrives picture-perfect.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon-tile"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></div>
+            <h3 class="feature-card__title" data-i18n="feat3Title">Custom Creations</h3>
+            <p data-i18n="feat3Desc">Bespoke tiers, customized chocolate writing, and tailored sweetness for every milestone.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section class="section" id="menu">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow" data-i18n="menuEyebrow">Our Daily Selection</span>
+          <h2 class="section__title" data-i18n="menuTitle">Baked Fresh For You</h2>
+          <p class="lead" data-i18n="menuLead">Browse our signature cakes, cupcakes, and desserts. Click 'Add to Order' to assemble your WhatsApp cart.</p>
+        </div>
+
+        <!-- Storefront Menu Search Bar (Section 7.8) -->
+        <div class="menu-search-wrapper" role="search">
+          <div class="menu-search-bar">
+            <span class="menu-search-icon" aria-hidden="true">🔍</span>
+            <input type="search" id="menuSearchInput" class="menu-search-input" 
+                   placeholder="Search cakes, cupcakes, desserts…" 
+                   data-i18n-placeholder="searchPlaceholder"
+                   aria-label="Search the menu" role="searchbox" 
+                   title="Press ⌘K or Ctrl+K to search"
+                   autocomplete="off"
+                   oninput="app.handleSearchInput(this.value)" />
+            <span class="menu-search-kbd" id="searchKbdHint" title="Press ⌘K / Ctrl+K">⌘K</span>
+            <button type="button" class="menu-search-clear" id="menuSearchClear" onclick="app.clearSearch()" aria-label="Clear search" style="display:none;">✕</button>
+          </div>
+        </div>
+
+        <!-- Sort & Filter Controls (Section 7.9) -->
+        <div class="menu-controls-bar">
+          <!-- Category Filter: Pills on Desktop, Select on Mobile -->
+          <div class="menu-category-controls">
+            <div class="menu-filters desktop-category-pills" role="group" aria-label="Filter cakes by category">
+              <button type="button" class="filter-pill is-active" id="filter-all" onclick="app.setCategory('all')" data-i18n="catAll">All Sweets</button>
+              <button type="button" class="filter-pill" id="filter-cakes" onclick="app.setCategory('cakes')" data-i18n="catCakes">Layer Cakes</button>
+              <button type="button" class="filter-pill" id="filter-cupcakes" onclick="app.setCategory('cupcakes')" data-i18n="catCupcakes">Cupcakes</button>
+              <button type="button" class="filter-pill" id="filter-desserts" onclick="app.setCategory('desserts')" data-i18n="catDesserts">Desserts</button>
+            </div>
+            <div class="mobile-category-wrap">
+              <select id="mobileCategorySelect" class="form-select mobile-category-select" onchange="app.setCategory(this.value)" aria-label="Filter category">
+                <option value="all" data-i18n="catAll">All Sweets</option>
+                <option value="cakes" data-i18n="catCakes">Layer Cakes</option>
+                <option value="cupcakes" data-i18n="catCupcakes">Cupcakes</option>
+                <option value="desserts" data-i18n="catDesserts">Desserts</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Sort & Price Dropdowns -->
+          <div class="menu-dropdown-group">
+            <div class="menu-select-wrapper">
+              <label for="menuSortSelect" class="sr-only" data-i18n="sortLabel">Sort</label>
+              <select id="menuSortSelect" class="form-select menu-select" onchange="app.setSort(this.value)" aria-label="Sort products">
+                <option value="popular" data-i18n="sortPopular">Popular</option>
+                <option value="newest" data-i18n="sortNewest">Newest</option>
+                <option value="price-asc" data-i18n="sortPriceAsc">Price: Low to High</option>
+                <option value="price-desc" data-i18n="sortPriceDesc">Price: High to Low</option>
+                <option value="name-asc" data-i18n="sortNameAsc">Name A–Z</option>
+              </select>
+            </div>
+
+            <div class="menu-select-wrapper">
+              <label for="menuPriceSelect" class="sr-only" data-i18n="priceRangeLabel">Price</label>
+              <select id="menuPriceSelect" class="form-select menu-select" onchange="app.setPriceRange(this.value)" aria-label="Price range filter">
+                <option value="any" data-i18n="priceAny">Any price</option>
+                <option value="under-20" >Under $20</option>
+                <option value="20-40" >$20 – $40</option>
+                <option value="40-60" >$40 – $60</option>
+                <option value="over-60" >Over $60</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Results Count Live Announcement -->
+          <div class="menu-results-count" id="menuResultsCount" role="status" aria-live="polite">
+            <!-- Dynamic: Showing X of Y cakes -->
+          </div>
+        </div>
+
+        <!-- Dynamic Menu Grid -->
+        <div class="menu-grid" id="menuGrid" role="region" aria-live="polite">
+          <!-- Rendered dynamically by app.renderMenu() -->
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- How Ordering Works Section -->
+    <section class="section section--shell" id="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow" data-i18n="stepsEyebrow">Simple & Delightful</span>
+          <h2 class="section__title" data-i18n="stepsTitle">How Ordering Works</h2>
+          <p class="lead" data-i18n="stepsLead">Three effortless steps from our kitchen to your celebration table.</p>
+        </div>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step__num">01</div>
+            <h3 class="step-card__title" data-i18n="step1Title">Choose Your Favorites</h3>
+            <p data-i18n="step1Desc">Browse our menu and pick the cakes, cupcakes, or desserts you'd love to share with loved ones.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step__num">02</div>
+            <h3 class="step-card__title" data-i18n="step2Title">Send Via WhatsApp</h3>
+            <p data-i18n="step2Desc">Click Send Order to open an instant pre-formatted WhatsApp message directly to our head baker.</p>
+          </div>
+
+          <div class="step-card">
+            <div class="step__num">03</div>
+            <h3 class="step-card__title" data-i18n="step3Title">Confirm & Celebrate</h3>
+            <p data-i18n="step3Desc">We confirm your delivery slot or pickup time, bake fresh that morning, and deliver to your door.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="section" id="story">
+      <div class="container">
+        <div class="story__grid">
+          <div class="story__visual story__visual--photo">
+            <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=900&auto=format&fit=crop&q=80" alt="Our artisan bakery kitchen" class="story__img" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='flex';" />
+            <div class="story__emoji" aria-label="Kitchen Flour & Baker Hat" style="display:none;">👩‍🍳</div>
+            <div class="story__caption">
+              <h3 class="card__title" style="margin-bottom:6px;" data-i18n="storyImgTitle">Sweet Artisan Heritage</h3>
+              <p class="text-small" style="color:rgba(255,253,248,0.85);" data-i18n="storyImgDesc">Fresh from our oven to your family celebration</p>
+            </div>
+          </div>
+
+          <div class="story__content">
+            <span class="eyebrow" data-i18n="storyEyebrow">Our Heritage</span>
+            <h2 class="section__title" data-i18n="storyTitle">Crafted with patience, baked with devotion</h2>
+            <p id="storyText" class="lead" style="line-height:1.75;">
+              Yummy Sweets began as a dream in our home kitchen: to restore pure artisan craftsmanship to celebration cakes. We believe true indulgence comes from authentic, unadulterated ingredients. Every sponge is whipped by hand, every fruit compote simmered from scratch, and every ganache blended from fine single-origin cocoa.
+            </p>
+
+            <ul class="story__bullets">
+              <li class="story__bullet">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span data-i18n="bullet1">Slow-fermented buttermilk and organic flours</span>
+              </li>
+              <li class="story__bullet">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span data-i18n="bullet2">Zero synthetic flavorings or artificial frostings</span>
+              </li>
+              <li class="story__bullet">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span data-i18n="bullet3">Dedicated pastry artisans with European techniques</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="section-divider"></div>
+
+    <!-- Reviews Testimonials Section -->
+    <section class="section section--shell" id="reviews">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow" data-i18n="reviewsEyebrow">Testimonials</span>
+          <h2 class="section__title" data-i18n="reviewsTitle">Sweet Words from Customers</h2>
+          <p class="lead" data-i18n="reviewsLead">Real feedback from memorable birthdays, weddings, and weekend family teas.</p>
+          <button class="btn btn--primary" style="margin-top:16px;" onclick="app.openSubmitReviewModal()" data-i18n="btnLeaveReview">Leave a Review</button>
+        </div>
+
+        <div class="reviews-grid" id="reviewsGrid">
+          <!-- Dynamically injected by renderReviews() -->
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section" id="faq">
+      <div class="container">
+        <div class="section-header">
+          <span class="eyebrow" data-i18n="faqEyebrow">Common Inquiries</span>
+          <h2 class="section__title" data-i18n="faqTitle">Frequently Asked Questions</h2>
+          <p class="lead" data-i18n="faqLead">Everything you need to know about our ordering process, dietary needs, and delivery times.</p>
+        </div>
+
+        <div class="faq-wrap" id="faqWrap">
+          <!-- Dynamically injected by renderFAQ() -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action & Contact Section -->
+    <section class="section section--shell" id="contact">
+      <div class="container">
+        <!-- Berry Gradient CTA Panel -->
+        <div class="cta-panel">
+          <div class="cta-panel__inner">
+            <h2 class="section__title" data-i18n="ctaTitle">Ready to make your occasion sweeter?</h2>
+            <p data-i18n="ctaLead">Have a custom design or special theme in mind? Our master bakers are ready to bring your vision to life.</p>
+            <div class="cta-panel__actions">
+              <button type="button" class="btn btn--light btn--lg" onclick="app.openWhatsAppDirect()" data-i18n="ctaBtnWhatsApp">Chat on WhatsApp</button>
+              <a href="#menu" class="btn btn--ghost btn--lg" style="color:#FFFFFF;border-color:rgba(255,255,255,0.4);" data-i18n="ctaBtnMenu">View All Cakes</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 Contact Information Cards -->
+        <div class="info-cards-grid">
+          <div class="info-card">
+            <div class="info-card__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <h3 class="card__title" data-i18n="cardAddressTitle">Bakery Kitchen</h3>
+            <p class="text-small" id="infoAddress">Dream City Avenue, Near English Village, Erbil, Kurdistan</p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <h3 class="card__title" data-i18n="cardHoursTitle">Opening Hours</h3>
+            <p class="text-small" id="infoHours">Mon – Sun: 9:00 AM – 10:00 PM<br/>Fresh bakes ready by 10 AM daily</p>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card__icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 8.5-8.5 8.38 8.38 0 0 1 3.8.9 8.5 8.5 0 0 1 4.7 7.6z"/></svg></div>
+            <h3 class="card__title" data-i18n="cardContactTitle">Direct Contact</h3>
+            <p class="text-small" id="infoContact">WhatsApp: +15551234567<br/>hello@yummysweets.com<br/>+964 750 123 4567</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Sticky Order Tray -->
+  <aside class="order-tray" id="orderTray" role="region" aria-live="polite" aria-label="Selected Cake Order Tray">
+    <!-- Expandable Breakdown Drawer -->
+    <div class="tray-breakdown" id="trayBreakdown" style="display:none;">
+      <div class="tray-breakdown__header">
+        <span class="tray-breakdown__title" data-i18n="economyPreview">Order Breakdown</span>
+        <button type="button" class="tray-breakdown__close" onclick="app.toggleTrayBreakdown()" aria-label="Close breakdown">✕</button>
+      </div>
+      <div class="tray-breakdown__lines" id="trayBreakdownLines">
+        <!-- Injected dynamically by app.renderTray() -->
+      </div>
+      <!-- Promo Code Field -->
+      <div class="tray-promo-box" id="trayPromoArea">
+        <div class="tray-promo-row">
+          <input type="text" id="trayPromoInput" class="tray-promo-input" placeholder="Promo code..." maxlength="20" onkeydown="if(event.key==='Enter'){event.preventDefault();app.applyCartPromo();}" />
+          <button type="button" class="btn btn--xs btn--primary" id="btnApplyPromo" onclick="app.applyCartPromo()" data-i18n="trayApplyPromo">Apply</button>
+        </div>
+        <div id="trayPromoFeedback" class="tray-promo-feedback"></div>
+      </div>
+      <!-- Order Note Field -->
+      <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+        <label for="trayFulfillmentDate" style="display:block; font-size: 0.82rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 6px;">Requested Delivery/Pickup Date & Time *</label>
+        <input type="datetime-local" id="trayFulfillmentDate" class="tray-promo-input" style="width:100%;" required />
+      </div>
+      <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+        <label for="trayOrderNote" style="display:block; font-size: 0.82rem; color: rgba(255, 255, 255, 0.85); margin-bottom: 6px;" data-i18n="orderNoteLabel">Note for the baker (optional)</label>
+        <textarea id="trayOrderNote" class="tray-promo-input" style="width:100%; min-height: 60px; resize: vertical;" maxlength="300" placeholder="e.g. &quot;Happy birthday Sara&quot; or &quot;leave at the door&quot;" data-i18n-placeholder="orderNotePlaceholder" oninput="app.orderNote = this.value;"></textarea>
+      </div>
+    </div>
+
+    <!-- Minimum Order Warning Notice Banner -->
+    <div class="tray-min-notice" id="trayMinOrderNotice" style="display:none;"></div>
+
+    <div class="order-tray__main">
+      <div class="order-tray__meta" onclick="app.toggleTrayBreakdown()" role="button" tabindex="0" aria-label="Toggle order breakdown details">
+        <div class="tray-count-bubble" id="trayItemCount">0</div>
+        <div class="tray-total-text">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span class="tray-total-price" id="trayTotalPrice">$0.00</span>
+            <span id="trayFreeDeliveryBadge" class="tray-badge-free" style="display:none;" data-i18n="freeDelivery">Free</span>
+          </div>
+          <span class="tray-preview-text" id="trayPreviewText" data-i18n="trayEmptyPreview">No items selected</span>
+          <div class="tray-guest-notice" id="trayGuestNotice" style="display:none;" data-i18n="orderSignInToSave">Sign in to save this order to your history.</div>
+        </div>
+      </div>
+
+      <div class="order-tray__actions">
+        <button type="button" class="btn btn--ghost btn--sm tray-details-btn" id="btnTrayToggle" onclick="app.toggleTrayBreakdown()" aria-expanded="false">
+          <span id="trayToggleLabel" data-i18n="trayDetails">Details ▾</span>
+        </button>
+        <button type="button" class="btn btn--ghost btn--sm" style="color:#FFFFFF;border-color:rgba(255,255,255,0.25);" onclick="app.clearOrder()" data-i18n="trayClear">Clear</button>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+          <p style="font-size: 0.72rem; color: rgba(255,255,255,0.7); text-align: right; margin: 0; line-height: 1.2;">Payment via Cash on Delivery. Fee calculated on WhatsApp.</p>
+          <button type="button" class="btn btn--primary btn--sm" id="btnTrayWhatsApp" onclick="app.checkoutWhatsApp()" data-i18n="traySendWhatsApp">Send Order via WhatsApp</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand-col">
+          <a href="#hero" class="header__brand" style="color:inherit;text-decoration:none;">
+            <span class="logo__icon logo__mark" id="footerLogoIcon" data-logo>🎂</span>
+            <span class="brand__name" id="footerShopName">Yummy Sweets</span>
+          </a>
+          <p data-i18n="footerBlurb">A boutique bakery dedicated to handcrafted artisanal celebration cakes, gourmet cupcakes, and fine French pastries.</p>
+          <div class="footer__socials">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link" id="socialInsta" aria-label="Instagram">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-link" id="socialFb" aria-label="Facebook">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+            </a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-link" id="socialTiktok" aria-label="TikTok">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path></svg>
+            </a>
+            <a href="https://snapchat.com" target="_blank" rel="noopener noreferrer" class="social-link" id="socialSnap" aria-label="Snapchat">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10h.01"></path><path d="M15 10h.01"></path><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"></path></svg>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer__col">
+          <h4 data-i18n="footerShopLinks">Shop</h4>
+          <ul class="footer__links">
+            <li><a href="#menu" onclick="app.setCategory('cakes')" data-i18n="catCakes">Layer Cakes</a></li>
+            <li><a href="#menu" onclick="app.setCategory('cupcakes')" data-i18n="catCupcakes">Cupcakes</a></li>
+            <li><a href="#menu" onclick="app.setCategory('desserts')" data-i18n="catDesserts">Desserts</a></li>
+            <li><a href="#menu" onclick="app.setCategory('all')" data-i18n="catAll">All Sweets</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4 data-i18n="footerHelpLinks">Help &amp; Info</h4>
+          <ul class="footer__links">
+            <li><a href="#how-it-works" data-i18n="navHowItWorks">How It Works</a></li>
+            <li><a href="#faq" data-i18n="navFaq">FAQ</a></li>
+            <li><a href="#story" data-i18n="navOurStory">Our Story</a></li>
+            <li><a href="#contact" data-i18n="navContact">Contact Bakery</a></li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h4 data-i18n="footerHoursTitle">Baking Hours</h4>
+          <p class="text-small" id="footerHours" style="color:rgba(255,251,247,0.75);margin-bottom:12px;">Mon – Sun: 9:00 AM – 10:00 PM<br/>Fresh bakes ready by 10 AM daily</p>
+          <p class="text-small" style="color:rgba(255,251,247,0.75);"><span data-i18n="footerOrdersInfo">Orders &amp; inquiries:</span> <br/><strong id="footerPhone" style="color:var(--gold-soft);">+964 750 123 4567</strong></p>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <span>Developed with respect and love by null-tech (&copy; <span id="copyrightYear">2026</span> <strong id="copyrightName">Yummy Sweets</strong>. <span data-i18n="copyrightAllRights">All rights reserved.</span>)</span>
+        <span data-i18n="footerTagline">Baked fresh daily with wholesome ingredients &amp; pure love.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Login Modal (3 Tabs: Customer / Admin / Developer with ZERO credential hints) -->
+  <div class="modal-overlay" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authModalTitle">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title" id="authModalTitle" data-i18n="btnSignIn">Sign In</h3>
+        <button type="button" class="modal-close" onclick="app.closeAuthModal()" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-tabs">
+          <button type="button" class="modal-tab-btn is-active" id="tabBtnCustomer" onclick="app.switchAuthTab('customer')" data-i18n="tabCustomer">Customer</button>
+          <button type="button" class="modal-tab-btn" id="tabBtnAdmin" onclick="app.switchAuthTab('admin')" data-i18n="tabAdmin">Admin</button>
+          <button type="button" class="modal-tab-btn" id="tabBtnDev" onclick="app.switchAuthTab('dev')" data-i18n="tabDev">Developer</button>
+        </div>
+
+        <!-- Customer Form -->
+        <form id="customerAuthForm" onsubmit="app.handleCustomerSubmit(event)">
+          <p class="text-small" style="color:var(--muted);margin-bottom:16px;">
+            Sign in with Google or your phone number. Your name will pre-fill your orders.
+          </p>
+          <div class="form-group">
+            <label class="form-label" for="custMobile" data-i18n="labelPhone">Mobile Number</label>
+            <input type="tel" id="custMobile" class="form-input" placeholder="+964 750 ..." autocomplete="tel" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="custName" data-i18n="labelDisplayName">Your Name / Display Name</label>
+            <input type="text" id="custName" class="form-input" placeholder="e.g. Sara" autocomplete="name" />
+          </div>
+          <button type="button" class="btn btn--outline" style="width:100%;margin-top:8px;" onclick="app.handleGoogleLogin('customer')">Sign in with Google</button>
+          <div style="text-align:center;margin:12px 0;color:var(--muted);font-size:0.9rem;">- or -</div>
+          <button type="submit" class="btn btn--primary" style="width:100%;">Continue with Phone</button>
+        </form>
+
+        <!-- Staff / Operator Login Form (Shared by Admin and Developer tabs, ZERO credential hints) -->
+        <form id="staffAuthForm" style="display:none;" onsubmit="app.handleStaffSubmit(event)">
+          <p class="text-small" id="staffFormDesc" style="color:var(--muted);margin-bottom:16px;" data-i18n="staffFormDesc">
+            Please enter your management credentials or login with Google to access the bakery control panel.
+          </p>
+          <div class="form-group" id="staffUsernameGroup">
+            <label class="form-label" for="staffUsername" data-i18n="labelUsername">Username</label>
+            <input type="text" id="staffUsername" class="form-input" placeholder="Username" autocomplete="username" />
+          </div>
+          <div class="form-group" id="staffPasswordGroup">
+            <label class="form-label" for="staffPassword" data-i18n="labelPassword">Password</label>
+            <input type="password" id="staffPassword" class="form-input" placeholder="••••••••" autocomplete="current-password" />
+          </div>
+          <button type="button" class="btn btn--outline" style="width:100%;margin-top:8px;" onclick="app.handleGoogleLogin('staff')">Login with Google</button>
+          <div style="text-align:center;margin:12px 0;color:var(--muted);font-size:0.9rem;">- or -</div>
+          <button type="submit" class="btn btn--primary" style="width:100%;" id="btnStaffLogin">Login with Username</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customer Order History Modal (Section 7.7) -->
+  <div class="modal-overlay" id="historyModal" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
+    <div class="modal-window history-modal-window">
+      <div class="modal-header">
+        <div class="history-modal-header-content">
+          <h3 class="modal-title" id="historyModalTitle" data-i18n="myOrdersTitle">My Orders</h3>
+          <p class="history-modal-subtitle" id="historyModalSubtitle" data-i18n="historyZero">You've placed 0 orders.</p>
+        </div>
+        <button type="button" class="modal-close" onclick="app.closeHistoryModal()" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="modal-body history-modal-body" id="historyModalBody">
+        <!-- Rendered dynamically by app.renderCustomerHistory() -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Control Panel CMS Modal -->
+  <div class="modal-overlay" id="panelModal" role="dialog" aria-modal="true" aria-labelledby="panelModalTitle">
+    <div class="modal-window modal-window--large">
+      <div class="modal-header">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <h3 class="modal-title" id="panelModalTitle" data-i18n="panelTitle">Bakery Control Panel</h3>
+          <span class="badge badge--admin" id="panelUserBadge">ADMIN</span>
+        </div>
+        <button type="button" class="modal-close" onclick="app.closePanelModal()" aria-label="Close control panel">✕</button>
+      </div>
+      <!-- Modal Scoped Toast Container (Top-right of modal) -->
+      <div class="modal-toast-container" id="modalToastContainer" role="status" aria-live="polite"></div>
+      <div class="panel-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="panel-sidebar" id="panelSidebar" role="navigation" aria-label="Control Panel Modules">
+          <!-- Populated dynamically based on user role -->
+        </aside>
+
+        <!-- Panel Content Work Area -->
+        <div class="panel-content" id="panelContent" role="region" aria-live="polite">
+          <!-- Populated by app.renderPanelTab() -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Custom Confirm Modal -->
+  <div class="modal-overlay" id="submitReviewModal" role="dialog" aria-modal="true" style="z-index:9999;">
+    <div class="modal-window" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title" data-i18n="leaveReviewTitle">Leave a Review</h3>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--muted); font-size:0.9rem; margin-bottom:16px;" data-i18n="leaveReviewDesc">We'd love to hear about your experience!</p>
+        <form onsubmit="app.submitCustomerReview(event)">
+          <div class="form-group">
+            <label class="form-label" data-i18n="reviewFormName">Your Name</label>
+            <input type="text" id="custReviewName" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" data-i18n="reviewFormQuote">Your Review</label>
+            <textarea id="custReviewQuote" class="form-input" rows="4" style="resize:vertical;" required></textarea>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:20px; justify-content:flex-end;">
+            <button type="button" class="btn btn--ghost" onclick="app.closeSubmitReviewModal()" data-i18n="btnCancel">Cancel</button>
+            <button type="submit" class="btn btn--primary" data-i18n="btnSubmit">Submit</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="customConfirmModal" role="dialog" aria-modal="true" style="z-index:9999;">
+    <div class="modal-window" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="confirmTitle">Confirm</h3>
+      </div>
+      <div class="modal-body">
+        <p id="confirmMessage" style="margin-bottom: 24px; color: var(--ink);"></p>
+        <div style="display: flex; justify-content: flex-end; gap: 12px;">
+          <button type="button" class="btn btn--ghost" id="confirmCancelBtn">Cancel</button>
+          <button type="button" class="btn btn--primary" id="confirmOkBtn">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Prompt Modal (Add Staff) -->
+  <div class="modal-overlay" id="customPromptModal" role="dialog" aria-modal="true" style="z-index:9999;">
+    <div class="modal-window" style="max-width: 400px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="promptTitle">Add Staff Account</h3>
+        <button type="button" class="modal-close" onclick="document.getElementById('customPromptModal').classList.remove('is-open')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="addStaffForm" onsubmit="app.submitAddStaff(event)">
+          <div class="form-group">
+            <label class="form-label" for="promptUsername">Username</label>
+            <input type="text" id="promptUsername" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="promptPassword">Password (min 4 chars)</label>
+            <input type="password" id="promptPassword" class="form-input" required minlength="4" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="promptName">Display Name</label>
+            <input type="text" id="promptName" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="promptRole">Role</label>
+            <select id="promptRole" class="form-select" onchange="document.getElementById('permissionsGroup').style.display = (this.value === 'staff' ? 'block' : 'none');">
+              <option value="staff">Staff</option>
+            </select>
+            <small style="color:var(--muted); font-size:0.75rem; display:block; margin-top:4px;">Only staff accounts can be created. Admins cannot create other admins.</small>
+          </div>
+          <div class="form-group" id="permissionsGroup" style="display:block;">
+            <label class="form-label">Permissions (Staff only)</label>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+              <label><input type="checkbox" name="staffPerms" value="products" checked> Products</label>
+              <label><input type="checkbox" name="staffPerms" value="customers" checked> Customers</label>
+              <label><input type="checkbox" name="staffPerms" value="economy"> Economy (Orders)</label>
+              <label><input type="checkbox" name="staffPerms" value="brand"> Brand & Logo</label>
+              <label><input type="checkbox" name="staffPerms" value="theme"> Theme</label>
+              <label><input type="checkbox" name="staffPerms" value="fonts"> Fonts</label>
+              <label><input type="checkbox" name="staffPerms" value="about"> About Us</label>
+              <label><input type="checkbox" name="staffPerms" value="contact"> Contact</label>
+              <label><input type="checkbox" name="staffPerms" value="socials"> Social Media</label>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+            <button type="button" class="btn btn--ghost" onclick="document.getElementById('customPromptModal').classList.remove('is-open')">Cancel</button>
+            <button type="submit" class="btn btn--primary">Add Staff</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit User Modal (Users tab) -->
+  <div class="modal-overlay" id="editUserModal" role="dialog" aria-modal="true" aria-labelledby="editUserTitle">
+    <div class="modal-window" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="editUserTitle">Edit User</h3>
+        <button type="button" class="modal-close" onclick="document.getElementById('editUserModal').classList.remove('is-open')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="editUserForm" onsubmit="app.submitEditUser(event)">
+          <input type="hidden" id="editUserId" />
+          <div class="form-group">
+            <label class="form-label" for="editUserName">Display Name</label>
+            <input type="text" id="editUserName" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="editUserLogin">Username / Phone</label>
+            <input type="text" id="editUserLogin" class="form-input" dir="ltr" required />
+          </div>
+          <div class="form-group" id="editUserPermsGroup">
+            <label class="form-label">Permissions</label>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px;">
+              <label><input type="checkbox" name="editUserPerms" value="products"> Products</label>
+              <label><input type="checkbox" name="editUserPerms" value="customers"> Customers</label>
+              <label><input type="checkbox" name="editUserPerms" value="economy"> Economy (Orders)</label>
+              <label><input type="checkbox" name="editUserPerms" value="brand"> Brand & Logo</label>
+              <label><input type="checkbox" name="editUserPerms" value="theme"> Theme</label>
+              <label><input type="checkbox" name="editUserPerms" value="fonts"> Fonts</label>
+              <label><input type="checkbox" name="editUserPerms" value="about"> About Us</label>
+              <label><input type="checkbox" name="editUserPerms" value="contact"> Contact</label>
+              <label><input type="checkbox" name="editUserPerms" value="socials"> Social Media</label>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
+            <button type="button" class="btn btn--ghost" onclick="document.getElementById('editUserModal').classList.remove('is-open')">Cancel</button>
+            <button type="submit" class="btn btn--primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
