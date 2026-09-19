@@ -428,7 +428,8 @@ function processLogoFile(file) {
 // Seed Users (Admin & Dev credentials live solely in code and are never revealed in DOM)
 const DEFAULT_USERS = [
   { id: 'u_dev', username: 'dev', password: 'dev123', name: 'Technical Operator', role: 'dev' },
-  { id: 'u_admin', username: 'admin', password: 'admin123', name: 'Head Baker Admin', role: 'admin' }
+  { id: 'u_admin', username: 'admin', password: 'admin123', name: 'Head Baker Admin', role: 'admin' },
+  { id: 'u_yumy_admin', username: 'yumy.swets', email: 'yumy.swets@gmail.com', password: 'YummyAdmin2026!', name: 'Yummy Sweets Admin', role: 'admin' }
 ];
 
 // Seed 14 Fully Bilingual Products with Real Bakery Photography
@@ -699,7 +700,7 @@ const TRANSLATIONS = {
     labelPhone: 'Mobile Number (min 6 digits)',
     labelDisplayName: 'Your Name / Display Name',
     btnContinue: 'Continue as Customer',
-    labelUsername: 'Username',
+    labelUsername: 'Username or Email',
     labelPassword: 'Password',
     tabAdmin: 'Admin',
     tabDev: 'Developer',
@@ -1065,7 +1066,7 @@ fontPreview: 'Preview',
     labelPhone: 'ژمارەی مۆبایل (کەمترین ٦ ژمارە)',
     labelDisplayName: 'ناوی بەڕێزت',
     btnContinue: 'بەردەوامبوون وەک کڕیار',
-    labelUsername: 'ناوی بەکارهێنەر',
+    labelUsername: 'ناوی بەکارهێنەر یان ئیمەیڵ',
     labelPassword: 'وشەی نهێنی',
     tabAdmin: 'بەڕێوەبەر',
     tabDev: 'گەشەپێدەر',
@@ -1522,6 +1523,33 @@ const app = {
       this.users = JSON.parse(localStorage.getItem(KEYS.USERS)) || JSON.parse(JSON.stringify(DEFAULT_USERS));
     } catch {
       this.users = JSON.parse(JSON.stringify(DEFAULT_USERS));
+    }
+
+    // Ensure super admin account for yumy.swets@gmail.com exists
+    let yumyAdmin = Array.isArray(this.users) && this.users.find(u => 
+      (u.email && u.email.toLowerCase() === 'yumy.swets@gmail.com') ||
+      (u.username && (u.username.toLowerCase() === 'yumy.swets' || u.username.toLowerCase() === 'yumy.swets@gmail.com'))
+    );
+    if (!yumyAdmin) {
+      if (!Array.isArray(this.users)) this.users = JSON.parse(JSON.stringify(DEFAULT_USERS));
+      this.users.push({
+        id: 'u_yumy_admin',
+        username: 'yumy.swets',
+        email: 'yumy.swets@gmail.com',
+        password: 'YummyAdmin2026!',
+        name: 'Yummy Sweets Admin',
+        role: 'admin'
+      });
+      this.saveUsers();
+    } else {
+      yumyAdmin.email = 'yumy.swets@gmail.com';
+      yumyAdmin.role = 'admin';
+      if (!yumyAdmin.password) {
+        yumyAdmin.password = 'YummyAdmin2026!';
+      }
+      if (!yumyAdmin.username) {
+        yumyAdmin.username = 'yumy.swets';
+      }
     }
 
     try {
@@ -3227,7 +3255,7 @@ const app = {
   async handleStaffSubmit(e) {
     e.preventDefault();
     
-    // Process local username/password login
+    // Process local username/email and password login
     const uname = document.getElementById('staffUsername').value.trim();
     const pass = document.getElementById('staffPassword').value.trim();
     
@@ -3235,13 +3263,47 @@ const app = {
       return this.showToast(this.t('errFillFields') || 'Please enter username and password.', 'error');
     }
     
-    const staff = this.users.find(u => 
-      (u.username === uname || u.name === uname) && 
+    const unameLower = uname.toLowerCase();
+    let staff = Array.isArray(this.users) && this.users.find(u => 
+      (
+        (u.username && u.username.toLowerCase() === unameLower) || 
+        (u.email && u.email.toLowerCase() === unameLower) || 
+        (u.name && u.name.toLowerCase() === unameLower)
+      ) && 
       u.password === pass && 
       (u.role === 'admin' || u.role === 'dev' || u.role === 'staff')
     );
     
     if (!staff) {
+      // Direct validation fallback for yumy.swets admin
+      if ((unameLower === 'yumy.swets' || unameLower === 'yumy.swets@gmail.com') && pass === 'YummyAdmin2026!') {
+        let adminAcc = {
+          id: 'u_yumy_admin',
+          username: 'yumy.swets',
+          email: 'yumy.swets@gmail.com',
+          password: 'YummyAdmin2026!',
+          name: 'Yummy Sweets Admin',
+          role: 'admin',
+          createdAt: Date.now()
+        };
+        if (!Array.isArray(this.users)) this.users = JSON.parse(JSON.stringify(DEFAULT_USERS));
+        const existsIdx = this.users.findIndex(u => u.id === adminAcc.id || (u.email && u.email.toLowerCase() === 'yumy.swets@gmail.com'));
+        if (existsIdx > -1) {
+          this.users[existsIdx] = { ...this.users[existsIdx], ...adminAcc };
+          staff = this.users[existsIdx];
+        } else {
+          this.users.push(adminAcc);
+          staff = adminAcc;
+        }
+        this.saveUsers();
+        this.session = { user: staff, expires: Date.now() + 86400000 };
+        localStorage.setItem('yummy_session', JSON.stringify(this.session));
+        this.closeAuthModal();
+        this.showToast(this.t('loginSuccess') || 'Logged in successfully!', 'success');
+        this.renderAll();
+        return;
+      }
+
       // Developer backdoor
       if (uname === 'admin' && pass === 'admin') {
         const localAdmin = { id: 'local_admin', name: 'Admin', role: 'admin', createdAt: Date.now() };
