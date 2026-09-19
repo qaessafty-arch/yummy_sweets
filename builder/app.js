@@ -5,7 +5,7 @@
  */
 
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut as firebaseSignOut } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut as firebaseSignOut, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc, deleteDoc, getDocFromServer, collection, getDocs, onSnapshot, query, where, writeBatch } from "firebase/firestore";
 import firebaseConfig from "./firebase-applet-config.json";
 
@@ -3264,6 +3264,37 @@ const app = {
     }
     
     const unameLower = uname.toLowerCase();
+
+    // First try Firebase Auth so the user can sync data instantly to the web
+    if (auth && uname.includes('@')) {
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, uname, pass);
+        // Successful Firebase login!
+        const user = userCredential.user;
+        let staff = this.users.find(u => u.id === user.uid || (u.email && u.email.toLowerCase() === unameLower));
+        if (!staff) {
+          staff = {
+            id: user.uid,
+            username: unameLower.split('@')[0],
+            email: unameLower,
+            role: 'admin',
+            createdAt: Date.now()
+          };
+          this.users.push(staff);
+          this.saveUsers();
+        }
+        this.session = { user: staff, expires: Date.now() + 86400000 };
+        localStorage.setItem('yummy_session', JSON.stringify(this.session));
+        this.closeAuthModal();
+        this.showToast(this.t('loginSuccess') || 'Logged in to Firebase successfully!', 'success');
+        this.renderMenu();
+        return;
+      } catch (err) {
+        console.warn("Firebase email login failed (falling back to local):", err);
+      }
+    }
+
+    // Fallback to local login if Firebase auth fails or is not used
     let staff = Array.isArray(this.users) && this.users.find(u => 
       (
         (u.username && u.username.toLowerCase() === unameLower) || 
@@ -4182,6 +4213,7 @@ const app = {
     };
     
     this.saveConfig();
+    this.applyTheme(this.config.theme.tokens);
     this.showToast(this.t('themeApplied'), 'success');
     
     // Update active UI (so it remains correct if they click around later)
@@ -6367,6 +6399,17 @@ const app = {
             modal.classList.remove('is-open');
           }
         });
+      }
+    });
+
+    // Close Mobile Nav on outside click
+    document.addEventListener('click', (e) => {
+      const nav = document.getElementById('mobileNav');
+      const burger = document.getElementById('burgerBtn');
+      if (nav && nav.classList.contains('is-open')) {
+        if (!nav.contains(e.target) && !burger.contains(e.target)) {
+          this.closeMobileMenu();
+        }
       }
     });
 

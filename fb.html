@@ -3981,7 +3981,7 @@ html, body {
 .container { max-width: 100%; }
 
   </style>
-  <script type="module" crossorigin src="./assets/index-DDU3B5Ys.js"></script>
+  <script type="module" crossorigin src="/assets/index-4Zrvw2l0.js"></script>
 </head>
 <body>
   <!-- Announcement Bar -->
@@ -4113,6 +4113,7 @@ html, body {
         <div class="hero__visual">
           <div class="hero__card">
             <img src="https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=900&auto=format&fit=crop&q=80" alt="Artisan celebration cake" class="hero__img" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';if(this.nextElementSibling)this.nextElementSibling.style.display='flex';" />
+            <span class="hero__badge-fresh" data-i18n="badgeFresh">Fresh today from 6 AM</span>
             <div class="hero__cake-emoji" aria-label="Celebration Cake Illustration" style="display:none;">🎂</div>
           </div>
 
@@ -4540,8 +4541,8 @@ html, body {
             Please enter your management credentials or login with Google to access the bakery control panel.
           </p>
           <div class="form-group" id="staffUsernameGroup">
-            <label class="form-label" for="staffUsername" data-i18n="labelUsername">Username or Email</label>
-            <input type="text" id="staffUsername" class="form-input" placeholder="Username or email" autocomplete="username" />
+            <label class="form-label" for="staffUsername" data-i18n="labelUsername">Username</label>
+            <input type="text" id="staffUsername" class="form-input" placeholder="Username" autocomplete="username" />
           </div>
           <div class="form-group" id="staffPasswordGroup">
             <label class="form-label" for="staffPassword" data-i18n="labelPassword">Password</label>
@@ -4549,7 +4550,7 @@ html, body {
           </div>
           <button type="button" class="btn btn--outline" style="width:100%;margin-top:8px;" onclick="app.handleGoogleLogin('staff')">Login with Google</button>
           <div style="text-align:center;margin:12px 0;color:var(--muted);font-size:0.9rem;">- or -</div>
-          <button type="submit" class="btn btn--primary" style="width:100%;" id="btnStaffLogin">Login</button>
+          <button type="submit" class="btn btn--primary" style="width:100%;" id="btnStaffLogin">Login with Username</button>
         </form>
       </div>
     </div>
