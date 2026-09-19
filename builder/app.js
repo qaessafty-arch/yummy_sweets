@@ -3290,11 +3290,12 @@ const app = {
         this.renderMenu();
         return;
       } catch (err) {
-        console.warn("Firebase email login failed (falling back to local):", err);
+        console.error("Firebase email login failed:", err);
+        return this.showToast('Firebase Login Failed: ' + err.message + ' (Did you add this email to Firebase Authentication Users?)', 'error');
       }
     }
 
-    // Fallback to local login if Firebase auth fails or is not used
+    // Fallback to local login if Firebase auth is not configured or not used
     let staff = Array.isArray(this.users) && this.users.find(u => 
       (
         (u.username && u.username.toLowerCase() === unameLower) || 
