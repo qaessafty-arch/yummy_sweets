@@ -429,7 +429,7 @@ function processLogoFile(file) {
 const DEFAULT_USERS = [
   { id: 'u_dev', username: 'dev', password: 'dev123', name: 'Technical Operator', role: 'dev' },
   { id: 'u_admin', username: 'admin', password: 'admin123', name: 'Head Baker Admin', role: 'admin' },
-  { id: 'u_yumy_admin', username: 'yumy.swets', email: 'yumy.swets@gmail.com', password: 'YummyAdmin2026!', name: 'Yummy Sweets Admin', role: 'admin' }
+  { id: 'dmfw78AEPYW1htK7rgqptaFRqs03', username: 'yumy.swets', email: 'yumy.swets@gmail.com', password: 'YummyAdmin2026!', name: 'Yummy Sweets Admin', role: 'admin' }
 ];
 
 // Seed 14 Fully Bilingual Products with Real Bakery Photography
@@ -1533,7 +1533,7 @@ const app = {
     if (!yumyAdmin) {
       if (!Array.isArray(this.users)) this.users = JSON.parse(JSON.stringify(DEFAULT_USERS));
       this.users.push({
-        id: 'u_yumy_admin',
+        id: 'dmfw78AEPYW1htK7rgqptaFRqs03',
         username: 'yumy.swets',
         email: 'yumy.swets@gmail.com',
         password: 'YummyAdmin2026!',
@@ -3310,7 +3310,7 @@ const app = {
       // Direct validation fallback for yumy.swets admin
       if ((unameLower === 'yumy.swets' || unameLower === 'yumy.swets@gmail.com') && pass === 'YummyAdmin2026!') {
         let adminAcc = {
-          id: 'u_yumy_admin',
+          id: 'dmfw78AEPYW1htK7rgqptaFRqs03',
           username: 'yumy.swets',
           email: 'yumy.swets@gmail.com',
           password: 'YummyAdmin2026!',
